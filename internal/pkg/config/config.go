@@ -13,7 +13,7 @@ var hasError bool
 type Env struct {
 	LogLevel  string
 	LogFormat string
-	Listen    string
+	Addr      string
 }
 
 func (e *Env) String() string {
@@ -24,7 +24,7 @@ type Config struct {
 	// Logger is the slog logger to use
 	Logger *slog.Logger
 
-	Listen string `json:"addr"`
+	Addr string `json:"addr"`
 }
 
 // ReadEnv reads the environment variables and returns an Env struct.
@@ -32,7 +32,7 @@ func ReadEnv() *Env {
 	return &Env{
 		LogLevel:  getEnv("LOG_LEVEL", "info"),
 		LogFormat: getEnv("LOG_FORMAT", "logfmt"),
-		Listen:    getEnv("LISTEN", ":8080"),
+		Addr:      getEnv("ADDR", ":8080"),
 	}
 }
 
@@ -40,7 +40,7 @@ func ReadEnv() *Env {
 func New(env *Env) *Config {
 	cfg := &Config{
 		Logger: parseLogger(env.LogLevel, env.LogFormat),
-		Listen: env.Listen,
+		Addr:   env.Addr,
 	}
 
 	if hasError {

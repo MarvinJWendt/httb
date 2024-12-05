@@ -26,7 +26,7 @@ func init() {
 }
 
 func main() {
-	slog.Info("starting httb server", "address", cfg.Listen)
+	slog.Info("starting httb server", "address", cfg.Addr)
 
 	service := Service{
 		Greetings: []string{
