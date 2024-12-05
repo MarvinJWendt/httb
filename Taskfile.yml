@@ -1,6 +1,13 @@
 version: "3"
 
 tasks:
+  run:
+    desc: Run the application
+    env:
+      LOG_LEVEL: debug
+    cmds:
+      - go run ./cmd/httb
+
   generate:
     desc: Generate code
     aliases: [gen]
