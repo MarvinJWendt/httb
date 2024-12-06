@@ -53,8 +53,16 @@ func formatResponse(ctx echo.Context, r *http.Request, text, keyName string) err
 	}
 }
 
+// Verify that Service fits the api.ServerInterface interface
+var _ api.ServerInterface = (*Service)(nil)
+
 type Service struct {
 	Greetings []string
+}
+
+func (s Service) GetJsonRandom(ctx echo.Context, params api.GetJsonRandomParams) error {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (s Service) GetGreeting(ctx echo.Context, params api.GetGreetingParams) error {

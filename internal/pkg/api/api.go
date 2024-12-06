@@ -47,6 +47,12 @@ type GetGreetingParams struct {
 // GetGreetingParamsFormat defines parameters for GetGreeting.
 type GetGreetingParamsFormat string
 
+// GetJsonRandomParams defines parameters for GetJsonRandom.
+type GetJsonRandomParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
 // GetPingParams defines parameters for GetPing.
 type GetPingParams struct {
 	// Format Response format (default: `json`)
@@ -64,6 +70,9 @@ type ServerInterface interface {
 	// Returns a random greeting message.
 	// (GET /greeting)
 	GetGreeting(ctx echo.Context, params GetGreetingParams) error
+	// Returns random JSON data.
+	// (GET /json/random)
+	GetJsonRandom(ctx echo.Context, params GetJsonRandomParams) error
 	// Returns `pong`.
 	// (GET /ping)
 	GetPing(ctx echo.Context, params GetPingParams) error
@@ -96,6 +105,24 @@ func (w *ServerInterfaceWrapper) GetGreeting(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshaled arguments
 	err = w.Handler.GetGreeting(ctx, params)
+	return err
+}
+
+// GetJsonRandom converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandom(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandom(ctx, params)
 	return err
 }
 
@@ -153,6 +180,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	}
 
 	router.GET(baseURL+"/greeting", wrapper.GetGreeting)
+	router.GET(baseURL+"/json/random", wrapper.GetJsonRandom)
 	router.GET(baseURL+"/ping", wrapper.GetPing)
 
 }
