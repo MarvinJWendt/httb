@@ -3,6 +3,18 @@ version: "3"
 tasks:
   run:
     desc: Run the application
+    deps:
+      - generate
+    env:
+      LOG_LEVEL: debug
+    cmds:
+      - go run ./cmd/httb
+
+  dev:
+    desc: Run the application in development mode with auto-rebuild
+    watch: true
+    sources:
+      - "**/*.go"
     env:
       LOG_LEVEL: debug
     cmds:
@@ -12,7 +24,7 @@ tasks:
     desc: Generate code
     aliases: [gen]
     cmds:
-      - go generate ./...
+      - go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --config=.openapi/oapi-codegen.yml assets/openapi.yaml
 
   test:
     desc: Run all tests

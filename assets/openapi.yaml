@@ -55,33 +55,6 @@ paths:
                 type: string
                 description: "Latency in milliseconds"
 
-  /greeting:
-    get:
-      tags:
-        - Special Endpoints
-      summary: "Returns a random greeting message."
-      description: "Returns a random greeting message."
-      parameters:
-        - $ref: '#/components/parameters/FormatParam'
-        - $ref: '#/components/parameters/DelayParam'
-      responses:
-        '200':
-          description: "Random greeting message"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  greeting:
-                    type: string
-                    example: "Hello, World!"
-                    description: "Random greeting message"
-            text/plain:
-              example: "Hello, World!"
-              schema:
-                type: string
-                description: "Random greeting message"
-
   # --- JSON Endpoints ---
   /json/random:
     get:
@@ -99,434 +72,202 @@ paths:
               schema:
                 type: object
 
+  /json/random/log:
+    get:
+      tags:
+        - JSON
+      summary: Returns random log data.
+      description: Returns log data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/LogLevels'
+        - $ref: '#/components/parameters/LogLevelWeights'
+        - name: count
+          in: query
+          description: "Number of log entries to return (min: 1; max: 10000)"
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10000
+            default: 10
+      responses:
+        '200':
+          description: Log data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
 
-#  # --- Return Request Data ---
-#  /return:
-#    get:
-#      tags:
-#        - Return Request Data
-#      summary: "Returns all data, headers, params, and body of the request."
-#      description: "Returns all data, headers, params, and body of the request."
-#      operationId: getReturn
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "Request data."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#    post:
-#      tags:
-#        - Return Request Data
-#      summary: "Returns all data, headers, params, and body of the request."
-#      description: "Returns all data, headers, params, and body of the request."
-#      operationId: postReturn
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        '200':
-#          description: "Request data."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#    put:
-#      tags:
-#        - Return Request Data
-#      summary: "Returns all data, headers, params, and body of the request."
-#      description: "Returns all data, headers, params, and body of the request."
-#      operationId: putReturn
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        '200':
-#          description: "Request data."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#    delete:
-#      tags:
-#        - Return Request Data
-#      summary: "Returns all data, headers, params, and body of the request."
-#      description: "Returns all data, headers, params, and body of the request."
-#      operationId: deleteReturn
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "Request data."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#    patch:
-#      tags:
-#        - Return Request Data
-#      summary: "Returns all data, headers, params, and body of the request."
-#      description: "Returns all data, headers, params, and body of the request."
-#      operationId: patchReturn
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        '200':
-#          description: "Request data."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#    options:
-#      tags:
-#        - Return Request Data
-#      summary: "Returns all data, headers, params, and body of the request."
-#      description: "Returns all data, headers, params, and body of the request."
-#      operationId: optionsReturn
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "Request data."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#    head:
-#      tags:
-#        - Return Request Data
-#      summary: "Returns all data, headers, params, and body of the request."
-#      description: "Returns all data, headers, params, and body of the request."
-#      operationId: headReturn
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "Request headers."
-#
-#  # --- Status Codes ---
-#  /status/{code}:
-#    get:
-#      tags:
-#        - Status Codes
-#      summary: "Returns the given status code."
-#      description: "Returns the specified HTTP status code."
-#      parameters:
-#        - name: code
-#          in: path
-#          required: true
-#          description: "HTTP status code to return."
-#          schema:
-#            type: integer
-#            minimum: 100
-#            maximum: 599
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        default:
-#          description: Custom status code with message.
-#    post:
-#      tags:
-#        - Status Codes
-#      summary: "Returns the given status code."
-#      description: "Returns the specified HTTP status code."
-#      parameters:
-#        - name: code
-#          in: path
-#          required: true
-#          description: "HTTP status code to return."
-#          schema:
-#            type: integer
-#            minimum: 100
-#            maximum: 599
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        default:
-#          description: Custom status code with message.
-#    put:
-#      tags:
-#        - Status Codes
-#      summary: "Returns the given status code."
-#      description: "Returns the specified HTTP status code."
-#      parameters:
-#        - name: code
-#          in: path
-#          required: true
-#          description: "HTTP status code to return."
-#          schema:
-#            type: integer
-#            minimum: 100
-#            maximum: 599
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        default:
-#          description: Custom status code with message.
-#    delete:
-#      tags:
-#        - Status Codes
-#      summary: "Returns the given status code."
-#      description: "Returns the specified HTTP status code."
-#      parameters:
-#        - name: code
-#          in: path
-#          required: true
-#          description: "HTTP status code to return."
-#          schema:
-#            type: integer
-#            minimum: 100
-#            maximum: 599
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        default:
-#          description: Custom status code with message.
-#    patch:
-#      tags:
-#        - Status Codes
-#      summary: "Returns the given status code."
-#      description: "Returns the specified HTTP status code."
-#      parameters:
-#        - name: code
-#          in: path
-#          required: true
-#          description: "HTTP status code to return."
-#          schema:
-#            type: integer
-#            minimum: 100
-#            maximum: 599
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        default:
-#          description: Custom status code with message.
-#    options:
-#      tags:
-#        - Status Codes
-#      summary: "Returns the given status code."
-#      description: "Returns the specified HTTP status code."
-#      parameters:
-#        - name: code
-#          in: path
-#          required: true
-#          description: "HTTP status code to return."
-#          schema:
-#            type: integer
-#            minimum: 100
-#            maximum: 599
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        default:
-#          description: Custom status code with message.
-#    head:
-#      tags:
-#        - Status Codes
-#      summary: "Returns the given status code."
-#      description: "Returns the specified HTTP status code."
-#      parameters:
-#        - name: code
-#          in: path
-#          required: true
-#          description: "HTTP status code to return."
-#          schema:
-#            type: integer
-#            minimum: 100
-#            maximum: 599
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        'default':
-#          description: "Custom status code response."
-#
-#  # --- HTTP Methods ---
-#  /get:
-#    get:
-#      tags:
-#        - HTTP Methods
-#      summary: "GET method test endpoint."
-#      description: "GET method test endpoint."
-#      operationId: getMethod
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "GET response."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#  /post:
-#    post:
-#      tags:
-#        - HTTP Methods
-#      summary: "POST method test endpoint."
-#      description: "POST method test endpoint."
-#      operationId: postMethod
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        '200':
-#          description: "POST response."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#  /put:
-#    put:
-#      tags:
-#        - HTTP Methods
-#      summary: "PUT method test endpoint."
-#      description: "PUT method test endpoint."
-#      operationId: putMethod
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        '200':
-#          description: "PUT response."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#  /delete:
-#    delete:
-#      tags:
-#        - HTTP Methods
-#      summary: "DELETE method test endpoint."
-#      description: "DELETE method test endpoint."
-#      operationId: deleteMethod
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "DELETE response."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#  /patch:
-#    patch:
-#      tags:
-#        - HTTP Methods
-#      summary: "PATCH method test endpoint."
-#      description: "PATCH method test endpoint."
-#      operationId: patchMethod
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      requestBody:
-#        description: "Any data to be sent."
-#        required: false
-#        content:
-#          'text/plain':
-#            schema:
-#              type: object
-#      responses:
-#        '200':
-#          description: "PATCH response."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#  /options:
-#    options:
-#      tags:
-#        - HTTP Methods
-#      summary: "OPTIONS method test endpoint."
-#      description: "OPTIONS method test endpoint."
-#      operationId: optionsMethod
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "OPTIONS response."
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/RequestData'
-#  /head:
-#    head:
-#      tags:
-#        - HTTP Methods
-#      summary: "HEAD method test endpoint."
-#      description: "HEAD method test endpoint."
-#      operationId: headMethod
-#      parameters:
-#        - $ref: '#/components/parameters/FormatParam'
-#        - $ref: '#/components/parameters/DelayParam'
-#      responses:
-#        '200':
-#          description: "HEAD response."
+  /json/random/address:
+    get:
+      tags:
+        - JSON
+      summary: Returns random address data.
+      description: Returns address data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        '200':
+          description: Address data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+
+  /json/random/contact:
+    get:
+      tags:
+        - JSON
+      summary: Returns random contact data.
+      description: Returns contact data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        '200':
+          description: Contact data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+
+  /json/random/user:
+    get:
+      tags:
+        - JSON
+      summary: Returns random user data.
+      description: Returns user data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        '200':
+          description: User data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  # --- Streaming Endpoints ---
+  /stream/json/user:
+    get:
+      tags:
+        - JSON
+        - Stream
+      summary: "Streams JSON data."
+      description: "Streams JSON data."
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/StreamInterval'
+      responses:
+        '200':
+          description: "JSON data."
+          content:
+            application/json:
+              schema:
+                type: object
+
+
+  /stream/json/logs:
+    get:
+      tags:
+        - JSON
+        - Stream
+      summary: "Streams JSON logs."
+      description: "Streams JSON logs."
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/LogLevels'
+        - $ref: '#/components/parameters/LogLevelWeights'
+        - $ref: '#/components/parameters/StreamInterval'
+      responses:
+        '200':
+          description: "JSON logs."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+
 components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: "1234 Elm St."
+          x-oapi-codegen-extra-tags:
+            fake: "{street}"
+        city:
+          type: string
+          example: "Springfield"
+          x-oapi-codegen-extra-tags:
+            fake: "{city}"
+        zip:
+          type: string
+          example: "62701"
+          x-oapi-codegen-extra-tags:
+            fake: "{zip}"
+    Contact:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          x-oapi-codegen-extra-tags:
+            fake: "{email}"
+        phone:
+          type: string
+          format: phone
+          x-oapi-codegen-extra-tags:
+            fake: "{phone}"
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: "John"
+          x-oapi-codegen-extra-tags:
+            fake: "{firstname}"
+        lastName:
+          type: string
+          example: "Doe"
+          x-oapi-codegen-extra-tags:
+            fake: "{lastname}"
+        age:
+          type: integer
+          minimum: 0
+          maximum: 100
+          example: 42
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - other
+          x-oapi-codegen-extra-tags:
+            fake: "{randomstring:[male,female,other]}"
+        contact:
+          type: object
+          $ref: '#/components/schemas/Contact'
+        address:
+          type: object
+          $ref: '#/components/schemas/Address'
+    Log:
+      type: object
+      properties:
+        level:
+          type: string
+          example: "info"
+          x-oapi-codegen-extra-tags:
+            fake: "{weighted:[debug,info,warn,error],[1,5,3,2]}"
+        message:
+          type: string
+          example: "We need to calculate the virtual PNG capacitor!"
+          x-oapi-codegen-extra-tags:
+            fake: "{hackerphrase}"
+        timestamp:
+          type: string
+          format: date-time
+
   parameters:
     FormatParam:
       name: format
@@ -547,29 +288,34 @@ components:
         minimum: 0
         maximum: 10000
         default: 0
-#  schemas:
-#    RequestData:
-#      type: object
-#      properties:
-#        method:
-#          type: string
-#          description: "HTTP method used in the request."
-#        url:
-#          type: string
-#          description: "Full URL of the request."
-#        headers:
-#          type: object
-#          additionalProperties:
-#            type: string
-#          description: "HTTP headers sent with the request."
-#        query:
-#          type: object
-#          additionalProperties:
-#            type: string
-#          description: "Query parameters sent with the request."
-#        body:
-#          type: object
-#          description: "Body of the request."
+    LogLevels:
+      name: logLevels
+      in: query
+      description: "Log levels to use (default: `debug,info,warn,error`)"
+      schema:
+        type: array
+        items:
+          type: string
+        default: [ debug, info, warn, error ]
+    LogLevelWeights:
+        name: logLevelWeights
+        in: query
+        description: "Log level weights (default: `1,5,3,2`)"
+        schema:
+          type: array
+          items:
+            type: number
+          default: [ 1, 5, 3, 2 ]
+    StreamInterval:
+        name: interval
+        in: query
+        description: "Interval in milliseconds between streamed responses (min: 0; max: 5000)"
+        schema:
+            type: integer
+            minimum: 0
+            maximum: 5000
+            default: 250
+
 tags:
   - name: Special Endpoints
     description: "Endpoints providing special functionality."
@@ -581,3 +327,5 @@ tags:
     description: "Endpoints to test various HTTP status codes."
   - name: JSON
     description: "Endpoints returning JSON data."
+  - name: Stream
+    description: "Endpoints returning streaming data."

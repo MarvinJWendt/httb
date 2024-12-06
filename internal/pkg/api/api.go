@@ -6,9 +6,18 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime"
+	openapi_types "github.com/oapi-codegen/runtime/types"
+)
+
+// Defines values for UserGender.
+const (
+	Female UserGender = "female"
+	Male   UserGender = "male"
+	Other  UserGender = "other"
 )
 
 // Defines values for FormatParam.
@@ -17,17 +26,44 @@ const (
 	FormatParamText FormatParam = "text"
 )
 
-// Defines values for GetGreetingParamsFormat.
-const (
-	GetGreetingParamsFormatJson GetGreetingParamsFormat = "json"
-	GetGreetingParamsFormatText GetGreetingParamsFormat = "text"
-)
-
 // Defines values for GetPingParamsFormat.
 const (
-	Json GetPingParamsFormat = "json"
-	Text GetPingParamsFormat = "text"
+	GetPingParamsFormatJson GetPingParamsFormat = "json"
+	GetPingParamsFormatText GetPingParamsFormat = "text"
 )
+
+// Address defines model for Address.
+type Address struct {
+	City   *string `fake:"{city}" json:"city,omitempty"`
+	Street *string `fake:"{street}" json:"street,omitempty"`
+	Zip    *string `fake:"{zip}" json:"zip,omitempty"`
+}
+
+// Contact defines model for Contact.
+type Contact struct {
+	Email *openapi_types.Email `fake:"{email}" json:"email,omitempty"`
+	Phone *string              `fake:"{phone}" json:"phone,omitempty"`
+}
+
+// Log defines model for Log.
+type Log struct {
+	Level     *string    `fake:"{weighted:[debug,info,warn,error],[1,5,3,2]}" json:"level,omitempty"`
+	Message   *string    `fake:"{hackerphrase}" json:"message,omitempty"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
+}
+
+// User defines model for User.
+type User struct {
+	Address   *Address    `json:"address,omitempty"`
+	Age       *int        `json:"age,omitempty"`
+	Contact   *Contact    `json:"contact,omitempty"`
+	FirstName *string     `fake:"{firstname}" json:"firstName,omitempty"`
+	Gender    *UserGender `fake:"{randomstring:[male,female,other]}" json:"gender,omitempty"`
+	LastName  *string     `fake:"{lastname}" json:"lastName,omitempty"`
+}
+
+// UserGender defines model for User.Gender.
+type UserGender string
 
 // DelayParam defines model for DelayParam.
 type DelayParam = int
@@ -35,20 +71,50 @@ type DelayParam = int
 // FormatParam defines model for FormatParam.
 type FormatParam string
 
-// GetGreetingParams defines parameters for GetGreeting.
-type GetGreetingParams struct {
-	// Format Response format (default: `json`)
-	Format *GetGreetingParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+// LogLevelWeights defines model for LogLevelWeights.
+type LogLevelWeights = []float32
 
+// LogLevels defines model for LogLevels.
+type LogLevels = []string
+
+// StreamInterval defines model for StreamInterval.
+type StreamInterval = int
+
+// GetJsonRandomParams defines parameters for GetJsonRandom.
+type GetJsonRandomParams struct {
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 }
 
-// GetGreetingParamsFormat defines parameters for GetGreeting.
-type GetGreetingParamsFormat string
+// GetJsonRandomAddressParams defines parameters for GetJsonRandomAddress.
+type GetJsonRandomAddressParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
 
-// GetJsonRandomParams defines parameters for GetJsonRandom.
-type GetJsonRandomParams struct {
+// GetJsonRandomContactParams defines parameters for GetJsonRandomContact.
+type GetJsonRandomContactParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
+// GetJsonRandomLogParams defines parameters for GetJsonRandomLog.
+type GetJsonRandomLogParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// LogLevels Log levels to use (default: `debug,info,warn,error`)
+	LogLevels *LogLevels `form:"logLevels,omitempty" json:"logLevels,omitempty"`
+
+	// LogLevelWeights Log level weights (default: `1,5,3,2`)
+	LogLevelWeights *LogLevelWeights `form:"logLevelWeights,omitempty" json:"logLevelWeights,omitempty"`
+
+	// Count Number of log entries to return (min: 1; max: 10000)
+	Count *int `form:"count,omitempty" json:"count,omitempty"`
+}
+
+// GetJsonRandomUserParams defines parameters for GetJsonRandomUser.
+type GetJsonRandomUserParams struct {
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 }
@@ -65,47 +131,61 @@ type GetPingParams struct {
 // GetPingParamsFormat defines parameters for GetPing.
 type GetPingParamsFormat string
 
+// GetStreamJsonLogsParams defines parameters for GetStreamJsonLogs.
+type GetStreamJsonLogsParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// LogLevels Log levels to use (default: `debug,info,warn,error`)
+	LogLevels *LogLevels `form:"logLevels,omitempty" json:"logLevels,omitempty"`
+
+	// LogLevelWeights Log level weights (default: `1,5,3,2`)
+	LogLevelWeights *LogLevelWeights `form:"logLevelWeights,omitempty" json:"logLevelWeights,omitempty"`
+
+	// Interval Interval in milliseconds between streamed responses (min: 0; max: 5000)
+	Interval *StreamInterval `form:"interval,omitempty" json:"interval,omitempty"`
+}
+
+// GetStreamJsonUserParams defines parameters for GetStreamJsonUser.
+type GetStreamJsonUserParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Interval Interval in milliseconds between streamed responses (min: 0; max: 5000)
+	Interval *StreamInterval `form:"interval,omitempty" json:"interval,omitempty"`
+}
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// Returns a random greeting message.
-	// (GET /greeting)
-	GetGreeting(ctx echo.Context, params GetGreetingParams) error
 	// Returns random JSON data.
 	// (GET /json/random)
 	GetJsonRandom(ctx echo.Context, params GetJsonRandomParams) error
+	// Returns random address data.
+	// (GET /json/random/address)
+	GetJsonRandomAddress(ctx echo.Context, params GetJsonRandomAddressParams) error
+	// Returns random contact data.
+	// (GET /json/random/contact)
+	GetJsonRandomContact(ctx echo.Context, params GetJsonRandomContactParams) error
+	// Returns random log data.
+	// (GET /json/random/log)
+	GetJsonRandomLog(ctx echo.Context, params GetJsonRandomLogParams) error
+	// Returns random user data.
+	// (GET /json/random/user)
+	GetJsonRandomUser(ctx echo.Context, params GetJsonRandomUserParams) error
 	// Returns `pong`.
 	// (GET /ping)
 	GetPing(ctx echo.Context, params GetPingParams) error
+	// Streams JSON logs.
+	// (GET /stream/json/logs)
+	GetStreamJsonLogs(ctx echo.Context, params GetStreamJsonLogsParams) error
+	// Streams JSON data.
+	// (GET /stream/json/user)
+	GetStreamJsonUser(ctx echo.Context, params GetStreamJsonUserParams) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
-}
-
-// GetGreeting converts echo context to params.
-func (w *ServerInterfaceWrapper) GetGreeting(ctx echo.Context) error {
-	var err error
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params GetGreetingParams
-	// ------------- Optional query parameter "format" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "format", ctx.QueryParams(), &params.Format)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter format: %s", err))
-	}
-
-	// ------------- Optional query parameter "delay" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
-	}
-
-	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetGreeting(ctx, params)
-	return err
 }
 
 // GetJsonRandom converts echo context to params.
@@ -123,6 +203,99 @@ func (w *ServerInterfaceWrapper) GetJsonRandom(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshaled arguments
 	err = w.Handler.GetJsonRandom(ctx, params)
+	return err
+}
+
+// GetJsonRandomAddress converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandomAddress(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomAddressParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandomAddress(ctx, params)
+	return err
+}
+
+// GetJsonRandomContact converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandomContact(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomContactParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandomContact(ctx, params)
+	return err
+}
+
+// GetJsonRandomLog converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandomLog(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomLogParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// ------------- Optional query parameter "logLevels" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "logLevels", ctx.QueryParams(), &params.LogLevels)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter logLevels: %s", err))
+	}
+
+	// ------------- Optional query parameter "logLevelWeights" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "logLevelWeights", ctx.QueryParams(), &params.LogLevelWeights)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter logLevelWeights: %s", err))
+	}
+
+	// ------------- Optional query parameter "count" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "count", ctx.QueryParams(), &params.Count)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter count: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandomLog(ctx, params)
+	return err
+}
+
+// GetJsonRandomUser converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandomUser(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomUserParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandomUser(ctx, params)
 	return err
 }
 
@@ -148,6 +321,70 @@ func (w *ServerInterfaceWrapper) GetPing(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshaled arguments
 	err = w.Handler.GetPing(ctx, params)
+	return err
+}
+
+// GetStreamJsonLogs converts echo context to params.
+func (w *ServerInterfaceWrapper) GetStreamJsonLogs(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetStreamJsonLogsParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// ------------- Optional query parameter "logLevels" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "logLevels", ctx.QueryParams(), &params.LogLevels)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter logLevels: %s", err))
+	}
+
+	// ------------- Optional query parameter "logLevelWeights" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "logLevelWeights", ctx.QueryParams(), &params.LogLevelWeights)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter logLevelWeights: %s", err))
+	}
+
+	// ------------- Optional query parameter "interval" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "interval", ctx.QueryParams(), &params.Interval)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter interval: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetStreamJsonLogs(ctx, params)
+	return err
+}
+
+// GetStreamJsonUser converts echo context to params.
+func (w *ServerInterfaceWrapper) GetStreamJsonUser(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetStreamJsonUserParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// ------------- Optional query parameter "interval" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "interval", ctx.QueryParams(), &params.Interval)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter interval: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetStreamJsonUser(ctx, params)
 	return err
 }
 
@@ -179,8 +416,13 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
-	router.GET(baseURL+"/greeting", wrapper.GetGreeting)
 	router.GET(baseURL+"/json/random", wrapper.GetJsonRandom)
+	router.GET(baseURL+"/json/random/address", wrapper.GetJsonRandomAddress)
+	router.GET(baseURL+"/json/random/contact", wrapper.GetJsonRandomContact)
+	router.GET(baseURL+"/json/random/log", wrapper.GetJsonRandomLog)
+	router.GET(baseURL+"/json/random/user", wrapper.GetJsonRandomUser)
 	router.GET(baseURL+"/ping", wrapper.GetPing)
+	router.GET(baseURL+"/stream/json/logs", wrapper.GetStreamJsonLogs)
+	router.GET(baseURL+"/stream/json/user", wrapper.GetStreamJsonUser)
 
 }

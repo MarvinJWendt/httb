@@ -1,4 +1,4 @@
-package main
+package service
 
 import (
 	"net/http"
@@ -20,6 +20,7 @@ func DelayMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, "Invalid delay parameter")
 			}
 
+			// TODO: Check if validation is needed after validator middleware
 			if delayMs < 0 || delayMs > 10000 {
 				return echo.NewHTTPError(http.StatusBadRequest, "Delay must be between 0 and 10000 milliseconds")
 			}

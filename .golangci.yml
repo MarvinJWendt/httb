@@ -31,7 +31,6 @@ linters:
     - gci # controls Go package import order and makes it always deterministic
     - gocheckcompilerdirectives # checks that go compiler directive comments (//go:) are valid
     - gochecksumtype # exhaustiveness checks on Go "sum types"
-    - gocognit # check for high cognitive complexity
     - gocritic # Go source code linter that provides a ton of rules
     - gocyclo # checks cyclomatic complexity
     - gofmt # checks whether code was gofmt-ed
@@ -113,6 +112,7 @@ linters:
     - cyclop # covered by gocyclo
     - gochecknoglobals # there are many valid reasons for global variables, depending on the project
     - ireturn # there are too many exceptions
+    - gocognit # check for high cognitive complexity
 
 linters-settings:
   wsl:

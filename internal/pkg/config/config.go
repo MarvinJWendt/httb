@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"os"
 	"strings"
+	"time"
 )
 
 var hasError bool
@@ -13,6 +14,7 @@ type Env struct {
 	LogLevel  string
 	LogFormat string
 	Addr      string
+	Timeout   string
 }
 
 func (e *Env) String() string {
@@ -23,7 +25,11 @@ type Config struct {
 	// Logger is the slog logger to use
 	Logger *slog.Logger
 
+	// Addr is the address to listen on
 	Addr string `json:"addr"`
+
+	// Timeout is the timeout for the http server
+	Timeout time.Duration `json:"timeout"`
 }
 
 // ReadEnv reads the environment variables and returns an Env struct.
@@ -32,14 +38,16 @@ func ReadEnv() *Env {
 		LogLevel:  getEnv("LOG_LEVEL", "info"),
 		LogFormat: getEnv("LOG_FORMAT", "logfmt"),
 		Addr:      getEnv("ADDR", ":8080"),
+		Timeout:   getEnv("TIMEOUT", "2m"),
 	}
 }
 
 // New reads the configuration from the environment variables and returns a Config and Env struct.
 func New(env *Env) *Config {
 	cfg := &Config{
-		Logger: parseLogger(env.LogLevel, env.LogFormat),
-		Addr:   env.Addr,
+		Logger:  parseLogger(env.LogLevel, env.LogFormat),
+		Addr:    env.Addr,
+		Timeout: parseTimeout(env.Timeout),
 	}
 
 	if hasError {
@@ -47,6 +55,15 @@ func New(env *Env) *Config {
 	}
 
 	return cfg
+}
+
+func parseTimeout(timeout string) time.Duration {
+	d, err := time.ParseDuration(timeout)
+	if err != nil {
+		configError("invalid timeout", "timeout", timeout)
+	}
+
+	return d
 }
 
 func parseLogger(level, format string) *slog.Logger {
