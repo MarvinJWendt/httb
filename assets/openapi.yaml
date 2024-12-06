@@ -1,9 +1,12 @@
 openapi: 3.0.3
 
 info:
-  title: HTTB API
+  title: HTTB.dev API Docs
   version: unstable
-  description: "HTTB is a modern alternative to httpbin.org"
+  description: "HTTB is a modern HTTP bin. Test your HTTP client or proxy with various HTTP methods, status codes, and more."
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
   contact:
     name: MarvinJWendt
     url: https://github.com/MarvinJWendt
@@ -51,6 +54,7 @@ paths:
               schema:
                 type: string
                 description: "Latency in milliseconds"
+
   /greeting:
     get:
       tags:
@@ -77,6 +81,24 @@ paths:
               schema:
                 type: string
                 description: "Random greeting message"
+
+  # --- JSON Endpoints ---
+  /json/random:
+    get:
+      tags:
+        - JSON
+      summary: Returns random JSON data.
+      description: Returns JSON data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        '200':
+          description: JSON data.
+          content:
+            application/json:
+              schema:
+                type: object
+
 
 #  # --- Return Request Data ---
 #  /return:
