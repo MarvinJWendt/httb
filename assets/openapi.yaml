@@ -579,3 +579,5 @@ tags:
     description: "Endpoints to test different HTTP methods."
   - name: Status Codes
     description: "Endpoints to test various HTTP status codes."
+  - name: JSON
+    description: "Endpoints returning JSON data."

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -86,25 +85,6 @@ func parseLogLevel(level string) slog.Level {
 		configError("invalid log level", "log_level", level)
 		return slog.LevelInfo
 	}
-}
-
-// parsePort parses the port from the environment variable.
-func parsePort(port string) int {
-	if port == "" {
-		return 8080
-	}
-
-	if strings.HasPrefix(port, ":") {
-		port = port[1:]
-	}
-
-	if p, err := strconv.Atoi(port); err == nil {
-		return p
-	} else {
-		configError("invalid port", "port", port)
-	}
-
-	return 8080
 }
 
 // error logs an error message and sets the hasError flag to true, which will cause the program to exit with a non-zero exit code.

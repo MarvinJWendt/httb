@@ -2,18 +2,17 @@ package main
 
 import (
 	_ "embed"
+	"log/slog"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/marvinjwendt/httb/assets"
 	"github.com/marvinjwendt/httb/internal/pkg/api"
 	"github.com/marvinjwendt/httb/internal/pkg/config"
 	slogecho "github.com/samber/slog-echo"
-	"log/slog"
 )
 
-var (
-	cfg *config.Config
-)
+var cfg *config.Config
 
 func init() {
 	// Init config

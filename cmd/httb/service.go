@@ -61,15 +61,15 @@ type Service struct {
 }
 
 func (s Service) GetJsonRandom(ctx echo.Context, params api.GetJsonRandomParams) error {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
-func (s Service) GetGreeting(ctx echo.Context, params api.GetGreetingParams) error {
-	randomGreeting := s.Greetings[rand.Intn(len(s.Greetings))]
+func (s Service) GetGreeting(ctx echo.Context, _ api.GetGreetingParams) error {
+	randomGreeting := s.Greetings[rand.Intn(len(s.Greetings))] //nolint:gosec // not security sensitive
 	return formatResponse(ctx, ctx.Request(), randomGreeting, "greeting")
 }
 
-func (s Service) GetPing(ctx echo.Context, params api.GetPingParams) error {
+func (s Service) GetPing(ctx echo.Context, _ api.GetPingParams) error {
 	return formatResponse(ctx, ctx.Request(), "pong", "message")
 }

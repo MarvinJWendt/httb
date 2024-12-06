@@ -31,4 +31,4 @@ tasks:
     cmds:
       - go mod tidy
       - go run github.com/bombsimon/wsl/v4/cmd/wsl --allow-cuddle-declarations --force-err-cuddling --force-case-trailing-whitespace 3 --fix ./...
-      - go run github.com/golangci/golangci-lint/cmd/golangci-lint
+      - go run github.com/golangci/golangci-lint/cmd/golangci-lint run --fix
