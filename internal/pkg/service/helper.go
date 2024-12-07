@@ -38,8 +38,8 @@ func getFormat(r *http.Request) ResponseFormat {
 	return ResponseFormatJSON
 }
 
-func formatResponse(ctx echo.Context, r *http.Request, text, keyName string) error {
-	format := getFormat(r)
+func formatResponse(ctx echo.Context, text, keyName string) error {
+	format := getFormat(ctx.Request())
 
 	switch format {
 	case ResponseFormatJSON:
