@@ -36,13 +36,13 @@ func NewLog(count int, logLevels map[string]float32) Log {
 	for i := range logs {
 		level, _ := gofakeit.Weighted(levels, weights)
 		levelString := fmt.Sprint(level)
-		now := time.Now()
+		ts := time.Now().Add(-time.Duration(count-i) * time.Second)
 		message := gofakeit.HackerPhrase()
 
 		logs[i] = api.Log{
 			Level:     &levelString,
 			Message:   &message,
-			Timestamp: &now,
+			Timestamp: &ts,
 		}
 	}
 

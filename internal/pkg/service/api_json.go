@@ -32,6 +32,8 @@ func (s Service) GetJsonRandomLog(ctx echo.Context, params api.GetJsonRandomLogP
 		logLevels[level] = (*params.LogLevelWeights)[i]
 	}
 
+	ctx.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
+
 	return ctx.String(http.StatusOK, random.NewLog(*params.Count, logLevels).String())
 }
 
@@ -39,8 +41,36 @@ func (s Service) GetJsonRandomAddress(ctx echo.Context, params api.GetJsonRandom
 	return ctx.JSON(http.StatusOK, random.Address())
 }
 
+func (s Service) GetJsonRandomAddresses(ctx echo.Context, params api.GetJsonRandomAddressesParams) error {
+	if params.Count == nil {
+		params.Count = new(int)
+		*params.Count = 10
+	}
+
+	addresses := make([]api.Address, *params.Count)
+	for i := range addresses {
+		addresses[i] = random.Address()
+	}
+
+	return ctx.JSON(http.StatusOK, addresses)
+}
+
 func (s Service) GetJsonRandomContact(ctx echo.Context, params api.GetJsonRandomContactParams) error {
 	return ctx.JSON(http.StatusOK, random.Contact())
+}
+
+func (s Service) GetJsonRandomContacts(ctx echo.Context, params api.GetJsonRandomContactsParams) error {
+	if params.Count == nil {
+		params.Count = new(int)
+		*params.Count = 10
+	}
+
+	contacts := make([]api.Contact, *params.Count)
+	for i := range contacts {
+		contacts[i] = random.Contact()
+	}
+
+	return ctx.JSON(http.StatusOK, contacts)
 }
 
 func (s Service) GetJsonRandom(c echo.Context, params api.GetJsonRandomParams) error {
@@ -49,4 +79,18 @@ func (s Service) GetJsonRandom(c echo.Context, params api.GetJsonRandomParams) e
 
 func (s Service) GetJsonRandomUser(ctx echo.Context, params api.GetJsonRandomUserParams) error {
 	return ctx.JSON(http.StatusOK, random.User())
+}
+
+func (s Service) GetJsonRandomUsers(ctx echo.Context, params api.GetJsonRandomUsersParams) error {
+	if params.Count == nil {
+		params.Count = new(int)
+		*params.Count = 10
+	}
+
+	users := make([]api.User, *params.Count)
+	for i := range users {
+		users[i] = random.User()
+	}
+
+	return ctx.JSON(http.StatusOK, users)
 }

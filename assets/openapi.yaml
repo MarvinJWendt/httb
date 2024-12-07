@@ -114,6 +114,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/Address'
 
+  /json/random/addresses:
+    get:
+      tags:
+        - JSON
+      summary: Returns random address data.
+      description: Returns address data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/Count'
+      responses:
+        '200':
+          description: Address data.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
+
   /json/random/contact:
     get:
       tags:
@@ -130,6 +149,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/Contact'
 
+  /json/random/contacts:
+    get:
+      tags:
+        - JSON
+      summary: Returns random contact data.
+      description: Returns contact data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/Count'
+      responses:
+        '200':
+          description: Contact data.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+
   /json/random/user:
     get:
       tags:
@@ -145,6 +183,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+
+  /json/random/users:
+    get:
+      tags:
+        - JSON
+      summary: Returns random user data.
+      description: Returns user data.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/Count'
+      responses:
+        '200':
+          description: User data.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
 
   # --- Streaming Endpoints ---
   /stream/json/user:
@@ -315,6 +372,15 @@ components:
             minimum: 0
             maximum: 5000
             default: 250
+    Count:
+      name: count
+      in: query
+      description: "Number of entries to return (min: 1; max: 10000)"
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 10
 
 tags:
   - name: Special Endpoints

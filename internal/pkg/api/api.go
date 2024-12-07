@@ -65,6 +65,9 @@ type User struct {
 // UserGender defines model for User.Gender.
 type UserGender string
 
+// Count defines model for Count.
+type Count = int
+
 // DelayParam defines model for DelayParam.
 type DelayParam = int
 
@@ -92,10 +95,28 @@ type GetJsonRandomAddressParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 }
 
+// GetJsonRandomAddressesParams defines parameters for GetJsonRandomAddresses.
+type GetJsonRandomAddressesParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Count Number of entries to return (min: 1; max: 10000)
+	Count *Count `form:"count,omitempty" json:"count,omitempty"`
+}
+
 // GetJsonRandomContactParams defines parameters for GetJsonRandomContact.
 type GetJsonRandomContactParams struct {
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
+// GetJsonRandomContactsParams defines parameters for GetJsonRandomContacts.
+type GetJsonRandomContactsParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Count Number of entries to return (min: 1; max: 10000)
+	Count *Count `form:"count,omitempty" json:"count,omitempty"`
 }
 
 // GetJsonRandomLogParams defines parameters for GetJsonRandomLog.
@@ -117,6 +138,15 @@ type GetJsonRandomLogParams struct {
 type GetJsonRandomUserParams struct {
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
+// GetJsonRandomUsersParams defines parameters for GetJsonRandomUsers.
+type GetJsonRandomUsersParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Count Number of entries to return (min: 1; max: 10000)
+	Count *Count `form:"count,omitempty" json:"count,omitempty"`
 }
 
 // GetPingParams defines parameters for GetPing.
@@ -163,15 +193,24 @@ type ServerInterface interface {
 	// Returns random address data.
 	// (GET /json/random/address)
 	GetJsonRandomAddress(ctx echo.Context, params GetJsonRandomAddressParams) error
+	// Returns random address data.
+	// (GET /json/random/addresses)
+	GetJsonRandomAddresses(ctx echo.Context, params GetJsonRandomAddressesParams) error
 	// Returns random contact data.
 	// (GET /json/random/contact)
 	GetJsonRandomContact(ctx echo.Context, params GetJsonRandomContactParams) error
+	// Returns random contact data.
+	// (GET /json/random/contacts)
+	GetJsonRandomContacts(ctx echo.Context, params GetJsonRandomContactsParams) error
 	// Returns random log data.
 	// (GET /json/random/log)
 	GetJsonRandomLog(ctx echo.Context, params GetJsonRandomLogParams) error
 	// Returns random user data.
 	// (GET /json/random/user)
 	GetJsonRandomUser(ctx echo.Context, params GetJsonRandomUserParams) error
+	// Returns random user data.
+	// (GET /json/random/users)
+	GetJsonRandomUsers(ctx echo.Context, params GetJsonRandomUsersParams) error
 	// Returns `pong`.
 	// (GET /ping)
 	GetPing(ctx echo.Context, params GetPingParams) error
@@ -224,6 +263,31 @@ func (w *ServerInterfaceWrapper) GetJsonRandomAddress(ctx echo.Context) error {
 	return err
 }
 
+// GetJsonRandomAddresses converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandomAddresses(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomAddressesParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// ------------- Optional query parameter "count" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "count", ctx.QueryParams(), &params.Count)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter count: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandomAddresses(ctx, params)
+	return err
+}
+
 // GetJsonRandomContact converts echo context to params.
 func (w *ServerInterfaceWrapper) GetJsonRandomContact(ctx echo.Context) error {
 	var err error
@@ -239,6 +303,31 @@ func (w *ServerInterfaceWrapper) GetJsonRandomContact(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshaled arguments
 	err = w.Handler.GetJsonRandomContact(ctx, params)
+	return err
+}
+
+// GetJsonRandomContacts converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandomContacts(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomContactsParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// ------------- Optional query parameter "count" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "count", ctx.QueryParams(), &params.Count)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter count: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandomContacts(ctx, params)
 	return err
 }
 
@@ -296,6 +385,31 @@ func (w *ServerInterfaceWrapper) GetJsonRandomUser(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshaled arguments
 	err = w.Handler.GetJsonRandomUser(ctx, params)
+	return err
+}
+
+// GetJsonRandomUsers converts echo context to params.
+func (w *ServerInterfaceWrapper) GetJsonRandomUsers(ctx echo.Context) error {
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetJsonRandomUsersParams
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", ctx.QueryParams(), &params.Delay)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter delay: %s", err))
+	}
+
+	// ------------- Optional query parameter "count" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "count", ctx.QueryParams(), &params.Count)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter count: %s", err))
+	}
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.GetJsonRandomUsers(ctx, params)
 	return err
 }
 
@@ -418,9 +532,12 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 
 	router.GET(baseURL+"/json/random", wrapper.GetJsonRandom)
 	router.GET(baseURL+"/json/random/address", wrapper.GetJsonRandomAddress)
+	router.GET(baseURL+"/json/random/addresses", wrapper.GetJsonRandomAddresses)
 	router.GET(baseURL+"/json/random/contact", wrapper.GetJsonRandomContact)
+	router.GET(baseURL+"/json/random/contacts", wrapper.GetJsonRandomContacts)
 	router.GET(baseURL+"/json/random/log", wrapper.GetJsonRandomLog)
 	router.GET(baseURL+"/json/random/user", wrapper.GetJsonRandomUser)
+	router.GET(baseURL+"/json/random/users", wrapper.GetJsonRandomUsers)
 	router.GET(baseURL+"/ping", wrapper.GetPing)
 	router.GET(baseURL+"/stream/json/logs", wrapper.GetStreamJsonLogs)
 	router.GET(baseURL+"/stream/json/user", wrapper.GetStreamJsonUser)
