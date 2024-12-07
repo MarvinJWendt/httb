@@ -14,6 +14,6 @@ func (s Service) GetStreamJsonUser(ctx echo.Context, params api.GetStreamJsonUse
 
 func (s Service) GetStreamJsonLogs(ctx echo.Context, params api.GetStreamJsonLogsParams) error {
 	return s.streamJSON(ctx, params.Interval, func() (any, error) {
-		return random.NewLog(1, nil), nil // TODO: add log levels
+		return random.NewLog(1, nil)[0], nil // TODO: add log levels
 	})
 }
