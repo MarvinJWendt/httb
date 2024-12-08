@@ -14,11 +14,9 @@ tasks:
       - go build -o .build/httb ./cmd/httb
 
   run:
-    desc: Run the application
+    desc: Run the application with production settings
     deps:
       - build
-    env:
-      LOG_LEVEL: debug
     cmds:
       - .build/httb
 
