@@ -6,5 +6,5 @@ import (
 )
 
 func (s Service) GetPing(ctx echo.Context, _ api.GetPingParams) error {
-	return formatResponse(ctx, ctx.Request(), "pong", "message")
+	return formatResponse(ctx, "pong", "message")
 }
