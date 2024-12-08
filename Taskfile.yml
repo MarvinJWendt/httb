@@ -8,6 +8,8 @@ tasks:
       - generate
     sources:
       - "**/*.go"
+    generates:
+      - .build/httb
     cmds:
       - go build -o .build/httb ./cmd/httb
 
