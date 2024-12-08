@@ -1,28 +1,42 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 
 tasks:
+  build:
+    desc: Build the application
+    deps:
+      - generate
+    sources:
+      - "**/*.go"
+    cmds:
+      - go build -o .build/httb ./cmd/httb
+
   run:
     desc: Run the application
     deps:
-      - generate
+      - build
     env:
       LOG_LEVEL: debug
     cmds:
-      - go run ./cmd/httb
+      - .build/httb
 
   dev:
     desc: Run the application in development mode with auto-rebuild
     watch: true
-    sources:
-      - "**/*.go"
+    deps:
+      - build
     env:
       LOG_LEVEL: debug
     cmds:
-      - go run ./cmd/httb
+      - .build/httb
 
   generate:
     desc: Generate code
     aliases: [gen]
+    sources:
+      - assets/openapi.yaml
+    generates:
+      - internal/pkg/api/api.go
     cmds:
       - go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --config=.openapi/oapi-codegen.yml assets/openapi.yaml
 
