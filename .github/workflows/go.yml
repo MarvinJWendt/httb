@@ -16,7 +16,7 @@ jobs:
         os: [ ubuntu-latest ] # only test on linux for now
     steps:
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: stable
 
