@@ -4,8 +4,9 @@ go 1.23.3
 
 require (
 	github.com/bombsimon/wsl/v4 v4.4.1
+	github.com/brianvoe/gofakeit/v7 v7.1.2
 	github.com/golangci/golangci-lint v1.62.2
-	github.com/labstack/echo/v4 v4.13.0
+	github.com/labstack/echo/v4 v4.13.1
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/samber/slog-echo v1.14.7
@@ -37,7 +38,6 @@ require (
 	github.com/blizzy78/varnamelen v0.8.0 // indirect
 	github.com/breml/bidichk v0.3.2 // indirect
 	github.com/breml/errchkjson v0.4.0 // indirect
-	github.com/brianvoe/gofakeit/v7 v7.1.2 // indirect
 	github.com/butuzov/ireturn v0.3.0 // indirect
 	github.com/butuzov/mirror v1.2.0 // indirect
 	github.com/catenacyber/perfsprint v0.7.1 // indirect
