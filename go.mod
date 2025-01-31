@@ -4,7 +4,7 @@ go 1.23.3
 
 require (
 	github.com/bombsimon/wsl/v4 v4.4.1
-	github.com/brianvoe/gofakeit/v7 v7.1.2
+	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/golangci/golangci-lint v1.62.2
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
