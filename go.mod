@@ -3,7 +3,7 @@ module github.com/marvinjwendt/httb
 go 1.23.3
 
 require (
-	github.com/bombsimon/wsl/v4 v4.4.1
+	github.com/bombsimon/wsl/v4 v4.5.0
 	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/golangci/golangci-lint v1.62.2
 	github.com/labstack/echo/v4 v4.13.3
