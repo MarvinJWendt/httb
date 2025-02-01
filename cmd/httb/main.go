@@ -2,8 +2,10 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 	"github.com/marvinjwendt/httb/internal/pkg/service"
 	"log/slog"
+	"os"
 
 	"github.com/marvinjwendt/httb/internal/pkg/config"
 )
@@ -12,14 +14,23 @@ var cfg *config.Config
 
 func init() {
 	// Init config
-	env := config.ReadEnv()
-	cfg = config.New(env)
+	var err error
+	cfg, err = config.LoadConfig()
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
+		os.Exit(1)
+	}
 
 	// Init logger
-	slog.SetDefault(cfg.Logger)
+	logger, err := cfg.SetupLogger()
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "failed to setup logger: %v\n", err)
+		os.Exit(1)
+	}
+	slog.SetDefault(logger)
 
 	// Print config in debug mode
-	slog.Debug("configuration", "environment", env)
+	slog.Debug("configuration", "environment", cfg)
 }
 
 func main() {
