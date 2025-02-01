@@ -17,7 +17,7 @@ func (s Service) Start() error {
 	e.HidePort = true
 
 	// Echo middlewares
-	e.Use(slogecho.New(s.config.Logger))
+	e.Use(slogecho.New(slog.Default()))
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
