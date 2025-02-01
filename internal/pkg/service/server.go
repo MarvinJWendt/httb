@@ -30,6 +30,10 @@ func (s Service) Start() error {
 
 	e.StaticFS("/docs", echo.MustSubFS(assets.Swagger, "swagger-ui"))
 
+	e.GET("/", func(c echo.Context) error {
+		return c.HTML(200, assets.LandingPage)
+	})
+
 	api.RegisterHandlers(e, s)
 
 	if err := e.Start("0.0.0.0:8080"); err != nil {
