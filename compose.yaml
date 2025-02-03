@@ -1,7 +1,10 @@
 services:
-  server:
+  httb:
+    image: ghcr.io/marvinjwendt/httb:main
+    container_name: httb
+    restart: always
+    ports:
+      - 8080:8080
     build:
       context: .
       target: final
-    ports:
-      - 8080:8080

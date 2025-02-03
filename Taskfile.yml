@@ -9,6 +9,7 @@ tasks:
     sources:
       - "**/*.go"
       - "**/*.html"
+      - "**/*.css"
     generates:
       - .build/httb
     cmds:
