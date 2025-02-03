@@ -468,6 +468,8 @@
         border-color: #48cb90;
     }
 
+    .opblock-summary-control:focus{outline:none !important;}
+
     .swagger-ui .opblock.opblock-post .opblock-summary-method, .swagger-ui .opblock.opblock-post .tab-header .tab-item.active h4 span::after { background: #48cb90; }
 
     .swagger-ui .opblock.opblock-post .opblock-summary { border-color: #48cb90; }
