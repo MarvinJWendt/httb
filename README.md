@@ -3,6 +3,9 @@
 > [HTTB.dev](https://httb.dev) - Free and open-source HTTP bin.  
 > Use HTTB endpoints to test your HTTP client and tools.
 
+> [!WARNING]
+> HTTB is work in progress. The API is not stable and some features are not yet implemented.
+
 ## Self host
 
 HTTB can be self-hosted using [Docker](https://docker.com).
