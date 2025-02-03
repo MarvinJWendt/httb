@@ -11,20 +11,20 @@
     embed[type="application/pdf"] { filter: invert(90%); }
 
     html {
-        background: #1f1f1f !important;
+        background: #1e2030 !important;
         box-sizing: border-box;
         filter: contrast(100%) brightness(100%) saturate(100%);
         overflow-y: scroll;
     }
 
     body {
-        background: #1f1f1f;
-        background-color: #1f1f1f;
+        background: #1e2030;
+        background-color: #1e2030;
         background-image: none !important;
     }
 
     button, input, select, textarea {
-        background-color: #1f1f1f;
+        background-color: #1e2030;
         color: #bfbfbf;
     }
 
@@ -546,7 +546,7 @@
     }
 
     .swagger-ui .scheme-container {
-        background: #1c1c21;
+        background: #1e2030;
         box-shadow: rgba(0, 0, 0, .15) 0 1px 2px 0;
     }
 
