@@ -1,8 +1,41 @@
-# httb
+# HTTB
 
-> HTTP bin
+> [HTTB.dev](https://httb.dev) - Free and open-source HTTP bin.  
+> Use HTTB endpoints to test your HTTP client and tools.
 
-## Configuration
+> [!WARNING]
+> HTTB is work in progress. The API is not stable and some features are not yet implemented.
+
+## Self host
+
+HTTB can be self-hosted using [Docker](https://docker.com).
+
+<table>
+<tr>
+<th>docker command</th>
+<th>docker compose</th>
+</tr>
+<tr>
+<td>
+
+```sh
+docker run -p 8080:8080 marvinjwendt/httb
+```
+
+</td>
+<td>
+
+```yml
+services:
+  httb:
+    image: marvinjwendt/httb
+    ports:
+      - 8080:8080
+```
+
+</td>
+</tr>
+</table>
 
 ### Environment Variables
 
