@@ -25,6 +25,7 @@ func (s Service) Start() error {
 	e.Use(DelayMiddleware)
 
 	e.GET("/openapi.yaml", func(c echo.Context) error {
+		c.Response().Header().Set("Content-Type", "application/x-yaml")
 		return c.String(200, assets.OpenAPISpec)
 	})
 
@@ -36,7 +37,7 @@ func (s Service) Start() error {
 
 	api.RegisterHandlers(e, s)
 
-	if err := e.Start("0.0.0.0:8080"); err != nil {
+	if err := e.Start(s.config.Addr); err != nil {
 		slog.Error("server stopped", "error", err)
 		return err
 	}
