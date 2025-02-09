@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/labstack/echo/v4"
+	"encoding/json"
 	"net/http"
 )
 
@@ -12,6 +12,16 @@ const (
 	ResponseFormatJSON
 	ResponseFormatText
 )
+
+func prepareJSON(w http.ResponseWriter, statusCode int) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(statusCode)
+}
+
+func sendJSON(w http.ResponseWriter, statusCode int, data interface{}) {
+	prepareJSON(w, statusCode)
+	_ = json.NewEncoder(w).Encode(data)
+}
 
 // getFormat decides which format to use for the response.
 // It first checks the query parameter `format` and then the `Accept` header.
@@ -38,15 +48,15 @@ func getFormat(r *http.Request) ResponseFormat {
 	return ResponseFormatJSON
 }
 
-func formatResponse(ctx echo.Context, text, keyName string) error {
-	format := getFormat(ctx.Request())
+func sendFormattedResponse(w http.ResponseWriter, r *http.Request, text, keyName string) {
+	format := getFormat(r)
 
 	switch format {
 	case ResponseFormatJSON:
-		return ctx.JSON(http.StatusOK, map[string]string{keyName: text})
+		sendJSON(w, http.StatusOK, map[string]string{keyName: text})
 	case ResponseFormatText:
-		return ctx.String(http.StatusOK, text)
+		_, _ = w.Write([]byte(text))
 	default:
-		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "invalid format"})
+		sendError(w, http.StatusBadRequest, "invalid format")
 	}
 }

@@ -39,9 +39,11 @@ services:
 
 ### Environment Variables
 
-| Name         | Description                                                | Default        |
-|--------------|------------------------------------------------------------|----------------|
-| `ADDR`       | Address to listen to                                       | `0.0.0.0:8080` |
-| `LOG_LEVEL`  | Log level (can be one of `debug`, `info`, `warn`, `error`) | `info`         |
-| `LOG_FORMAT` | Log format (can be one of `logfmt`, `json`)                | `logfmt`       |
-| `TIMEOUT`    | Timeout for responses                                      | `2m`           |
+| Name                                 | Description                                                | Default                 |
+|--------------------------------------|------------------------------------------------------------|-------------------------|
+| `ADDR`                               | Address to listen to                                       | `0.0.0.0:8080`          |
+| `LOG_LEVEL`                          | Log level (can be one of `debug`, `info`, `warn`, `error`) | `info`                  |
+| `LOG_FORMAT`                         | Log format (can be one of `logfmt`, `json`)                | `logfmt`                |
+| `TIMEOUT`                            | Timeout for responses                                      | `2m`                    |
+| `SWAGGER_DEFAULT_SERVER`             | Default server for the Swagger UI (/docs)                  | `http://localhost:8080` |
+| `SWAGGER_DEFAULT_SERVER_DESCRIPTION` | Description for the default Swagger UI server              | `for local testing`     |

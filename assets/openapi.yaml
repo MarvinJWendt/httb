@@ -1,5 +1,9 @@
 openapi: 3.0.3
 
+externalDocs:
+  url: https://httb.dev
+  description: "httb.dev"
+
 info:
   title: HTTB.dev API Docs
   version: unstable
@@ -8,12 +12,12 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   contact:
-    name: MarvinJWendt
+    name: GitHub
     url: https://github.com/MarvinJWendt
 
 servers:
-  - url: https://httb.dev
-    description: Official HTTB server
+  - url: "{{.SwaggerDefaultServer}}"
+    description: "{{.SwaggerDefaultServerDesc}}"
   - url: http://localhost:{port}
     description: Local HTTB server
     variables:
@@ -32,9 +36,9 @@ paths:
   /ping:
     get:
       tags:
-        - Special Endpoints
-      summary: "Returns `pong`."
-      description: "Very simple endpoint that always returns `pong`."
+        - Meta
+      summary: Returns "pong"
+      description: This endpoint always returns "pong". You can specify the response format.
       parameters:
         - $ref: '#/components/parameters/FormatParam'
         - $ref: '#/components/parameters/DelayParam'
@@ -49,11 +53,11 @@ paths:
                   message:
                     type: string
                     description: "pong"
+                    example: "pong"
             text/plain:
               example: "pong"
               schema:
                 type: string
-                description: "Latency in milliseconds"
 
   # --- JSON Endpoints ---
   /json/random:
@@ -243,6 +247,128 @@ paths:
               schema:
                 $ref: '#/components/schemas/Log'
 
+# --- HTTP Methods ---
+  /method/get:
+    get:
+      tags:
+        - HTTP Methods
+      summary: "GET method."
+      description: "Returns which method was used to access this endpoint."
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: "Method used"
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "GET"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    example: "GET"
+  /method/post:
+    post:
+      tags:
+        - HTTP Methods
+      summary: "POST method."
+      description: "Returns which method was used to access this endpoint."
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: "Method used"
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "POST"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    example: "POST"
+  /method/put:
+    put:
+      tags:
+        - HTTP Methods
+      summary: "PUT method."
+      description: "Returns which method was used to access this endpoint."
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: "Method used"
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "PUT"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    example: "PUT"
+  /method/patch:
+    patch:
+      tags:
+        - HTTP Methods
+      summary: "PATCH method."
+      description: "Returns which method was used to access this endpoint."
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: "Method used"
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "PATCH"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    example: "PATCH"
+  /method/delete:
+    delete:
+      tags:
+        - HTTP Methods
+      summary: "DELETE method."
+      description: "Returns which method was used to access this endpoint."
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+        - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: "Method used"
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "DELETE"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    example: "DELETE"
+
 components:
   schemas:
     Address:
@@ -383,8 +509,8 @@ components:
         default: 10
 
 tags:
-  - name: Special Endpoints
-    description: "Endpoints providing special functionality."
+  - name: Meta
+    description: "Endpoints providing meta functionality."
   - name: Return Request Data
     description: "Endpoints returning the received request data."
   - name: HTTP Methods

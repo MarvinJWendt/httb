@@ -1,10 +1,10 @@
 package service
 
 import (
-	"github.com/labstack/echo/v4"
 	"github.com/marvinjwendt/httb/internal/pkg/api"
+	"net/http"
 )
 
-func (s Service) GetPing(ctx echo.Context, _ api.GetPingParams) error {
-	return formatResponse(ctx, "pong", "message")
+func (s Service) GetPing(w http.ResponseWriter, r *http.Request, _ api.GetPingParams) {
+	sendFormattedResponse(w, r, "pong", "message")
 }

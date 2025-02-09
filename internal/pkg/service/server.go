@@ -1,43 +1,63 @@
 package service
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/marvinjwendt/httb/assets"
 	"github.com/marvinjwendt/httb/internal/pkg/api"
-	slogecho "github.com/samber/slog-echo"
+	sloghttp "github.com/samber/slog-http"
+	"io/fs"
 	"log/slog"
+	"net/http"
+	"text/template"
 )
 
 func (s Service) Start() error {
 	slog.Info("starting httb service")
 
-	e := echo.New()
-	e.HideBanner = true
-	e.HidePort = true
+	service := NewService(s.config)
+	r := http.NewServeMux()
+	h := api.HandlerFromMux(service, r)
 
-	// Echo middlewares
-	e.Use(slogecho.New(slog.Default()))
-	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
+	// landing page
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
 
-	// Custom middleware
-	e.Use(DelayMiddleware)
-
-	e.GET("/openapi.yaml", func(c echo.Context) error {
-		c.Response().Header().Set("Content-Type", "application/x-yaml")
-		return c.String(200, assets.OpenAPISpec)
+		_, _ = w.Write(assets.LandingPage)
 	})
 
-	e.StaticFS("/docs", echo.MustSubFS(assets.Swagger, "swagger-ui"))
+	// publish swagger ui under /docs
+	swaggerUI, err := fs.Sub(assets.Swagger, "swagger-ui")
+	if err != nil {
+		return err
+	}
+	r.Handle("/docs/", http.StripPrefix("/docs", http.FileServer(http.FS(swaggerUI))))
 
-	e.GET("/", func(c echo.Context) error {
-		return c.HTML(200, assets.LandingPage)
-	})
+	// parse openapi spec
+	tmpl, err := template.New("openapi").Parse(assets.OpenAPISpec)
+	// publish openapi spec
+	openapiSpecHandler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/x-yaml")
+		err := tmpl.Execute(w, *s.config)
+		if err != nil {
+			slog.Error("failed to render openapi spec", "error", err)
+		}
+	}
+	r.HandleFunc("/openapi.yaml", openapiSpecHandler)
+	r.HandleFunc("/openapi.yml", openapiSpecHandler)
 
-	api.RegisterHandlers(e, s)
+	// middlewares
+	h = DelayMiddleware(h)
+	h = sloghttp.Recovery(h)
+	h = sloghttp.New(slog.Default())(h)
 
-	if err := e.Start(s.config.Addr); err != nil {
+	server := &http.Server{
+		Handler: h,
+		Addr:    "0.0.0.0:8080",
+	}
+
+	if err := server.ListenAndServe(); err != nil {
 		slog.Error("server stopped", "error", err)
 		return err
 	}

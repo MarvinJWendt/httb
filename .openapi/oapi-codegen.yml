@@ -3,5 +3,5 @@ package: api
 output: ./internal/pkg/api/api.go
 
 generate:
-  echo-server: true
+  std-http-server: true
   models: true

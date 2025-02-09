@@ -11,4 +11,4 @@ var OpenAPISpec string
 var Swagger embed.FS
 
 //go:embed landing.html
-var LandingPage string
+var LandingPage []byte

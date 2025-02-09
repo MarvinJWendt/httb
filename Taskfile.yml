@@ -10,6 +10,7 @@ tasks:
       - "**/*.go"
       - "**/*.html"
       - "**/*.css"
+      - "**/*.yaml"
     generates:
       - .build/httb
     cmds:
@@ -37,6 +38,7 @@ tasks:
     aliases: [gen]
     sources:
       - assets/openapi.yaml
+      - .openapi/oapi-codegen.yml
     generates:
       - internal/pkg/api/api.go
     cmds:

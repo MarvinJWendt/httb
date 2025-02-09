@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"errors"
-	"github.com/labstack/echo/v4"
 	"github.com/marvinjwendt/httb/internal/pkg/api"
 	"net/http"
 	"time"
@@ -11,7 +10,7 @@ import (
 
 // stream handles the raw streaming of data to the client.
 // It writes data at specified intervals using the generator function.
-func (s Service) stream(ctx echo.Context, interval *api.StreamInterval, generator func() (any, error)) error {
+func (s Service) stream(w http.ResponseWriter, r *http.Request, interval *api.StreamInterval, generator func() (any, error)) error {
 	// Determine the tick duration based on the provided interval
 	var tickDuration time.Duration
 	if interval == nil {
@@ -27,13 +26,13 @@ func (s Service) stream(ctx echo.Context, interval *api.StreamInterval, generato
 	done := make(chan struct{})
 
 	// Handle client disconnect
-	notify := ctx.Request().Context().Done()
+	notify := r.Context().Done()
 
 	// Note: Removed SSE-specific headers to enable raw streaming
 	// The Content-Type is expected to be set by the caller (e.g., streamJSON)
 
 	// Flush the headers to ensure the client starts receiving data
-	if f, ok := ctx.Response().Writer.(http.Flusher); ok {
+	if f, ok := w.(http.Flusher); ok {
 		f.Flush()
 	}
 
@@ -67,11 +66,11 @@ func (s Service) stream(ctx echo.Context, interval *api.StreamInterval, generato
 				// Handle generator error by sending an error message to the client
 				errorMsg := map[string]string{"error": err.Error()}
 				jsonData, _ := json.Marshal(errorMsg)
-				_, writeErr := ctx.Response().Write(append(jsonData, '\n'))
+				_, writeErr := w.Write(append(jsonData, '\n'))
 				if writeErr != nil {
 					return writeErr
 				}
-				if f, ok := ctx.Response().Writer.(http.Flusher); ok {
+				if f, ok := w.(http.Flusher); ok {
 					f.Flush()
 				}
 				return err
@@ -83,24 +82,24 @@ func (s Service) stream(ctx echo.Context, interval *api.StreamInterval, generato
 				// Handle JSON encoding error
 				errorMsg := map[string]string{"error": err.Error()}
 				jsonData, _ = json.Marshal(errorMsg)
-				_, writeErr := ctx.Response().Write(append(jsonData, '\n'))
+				_, writeErr := w.Write(append(jsonData, '\n'))
 				if writeErr != nil {
 					return writeErr
 				}
-				if f, ok := ctx.Response().Writer.(http.Flusher); ok {
+				if f, ok := w.(http.Flusher); ok {
 					f.Flush()
 				}
 				return err
 			}
 
 			// Write the JSON data followed by a newline to delimit JSON objects
-			_, err = ctx.Response().Write(append(jsonData, '\n'))
+			_, err = w.Write(append(jsonData, '\n'))
 			if err != nil {
 				return err
 			}
 
 			// Flush the response to ensure the client receives the data immediately
-			if f, ok := ctx.Response().Writer.(http.Flusher); ok {
+			if f, ok := w.(http.Flusher); ok {
 				f.Flush()
 			}
 
@@ -125,17 +124,20 @@ func (s Service) stream(ctx echo.Context, interval *api.StreamInterval, generato
 }
 
 // streamJSON sets the Content-Type to application/json and streams JSON-encoded data.
-func (s Service) streamJSON(ctx echo.Context, interval *api.StreamInterval, generator func() (any, error)) error {
+func (s Service) streamJSON(w http.ResponseWriter, r *http.Request, interval *api.StreamInterval, generator func() (any, error)) {
 	// Set the Content-Type header for JSON streaming
-	ctx.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	ctx.Response().Header().Set("Cache-Control", "no-cache")
-	ctx.Response().Header().Set("Connection", "keep-alive")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
 
 	// Flush the headers to ensure the client starts receiving data
-	if f, ok := ctx.Response().Writer.(http.Flusher); ok {
+	if f, ok := w.(http.Flusher); ok {
 		f.Flush()
 	}
 
 	// Call the generic stream function with the provided generator
-	return s.stream(ctx, interval, generator)
+	err := s.stream(w, r, interval, generator)
+	if err != nil {
+		sendAndLogError(w, http.StatusInternalServerError, err.Error())
+	}
 }

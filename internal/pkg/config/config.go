@@ -11,10 +11,12 @@ import (
 
 // Config holds application configuration.
 type Config struct {
-	LogLevel  string        `env:"LOG_LEVEL" envDefault:"info"`
-	LogFormat string        `env:"LOG_FORMAT" envDefault:"logfmt"`
-	Addr      string        `env:"ADDR" envDefault:"0.0.0.0:8080"`
-	Timeout   time.Duration `env:"TIMEOUT" envDefault:"2m"`
+	LogLevel                 string        `env:"LOG_LEVEL" envDefault:"info"`
+	LogFormat                string        `env:"LOG_FORMAT" envDefault:"logfmt"`
+	Addr                     string        `env:"ADDR" envDefault:"0.0.0.0:8080"`
+	Timeout                  time.Duration `env:"TIMEOUT" envDefault:"2m"`
+	SwaggerDefaultServer     string        `env:"SWAGGER_DEFAULT_SERVER" envDefault:"http://localhost:8080"`
+	SwaggerDefaultServerDesc string        `env:"SWAGGER_DEFAULT_SERVER_DESCRIPTION" envDefault:"for local testing"`
 }
 
 // LoadConfig reads the environment variables and returns a Config struct.

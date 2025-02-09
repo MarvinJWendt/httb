@@ -51,7 +51,7 @@
         .buttons {
             display: flex;
             gap: 20px;
-            margin-bottom: 50px;
+            margin-bottom: 45px;
         }
         .btn {
             border: 2px solid var(--button-border);
@@ -76,6 +76,14 @@
             width: 500px;
             font-family: monospace;
             position: relative;
+            margin-bottom: 25px;
+        }
+        .link {
+            color: #5c5f77;
+        }
+        .openapi-link {
+            position: relative;
+            margin-bottom: 10px;
         }
         .code {
             user-select: all;
@@ -97,13 +105,16 @@
 <h2>Free and open-source HTTP bin</h2>
 <p>Use HTTB endpoints to test your HTTP client and tools - or to experiment with different data</p>
 <div class="buttons">
-    <a href="https://httb.dev/docs" class="btn">Documentation</a>
+    <a href="/docs" class="btn">Documentation</a>
     <a href="https://github.com/MarvinJWendt/httb" class="btn">GitHub</a>
 </div>
 <div class="code-block">
     <br/>
     <button class="refresh" onclick="refreshExample()"><i class="fas fa-sync-alt"></i></button>
     <span class="code" id="code-example">curl https://httb.dev/json/random</span>
+</div>
+<div class="openapi-link">
+    <a href="/openapi.yaml" class="link">OpenAPI Spec</a>
 </div>
 <script>
   const examples = [

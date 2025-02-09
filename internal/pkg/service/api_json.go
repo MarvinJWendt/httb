@@ -1,13 +1,12 @@
 package service
 
 import (
-	"github.com/labstack/echo/v4"
 	"github.com/marvinjwendt/httb/internal/pkg/api"
 	"github.com/marvinjwendt/httb/internal/pkg/random"
 	"net/http"
 )
 
-func (s Service) GetJsonRandomLog(ctx echo.Context, params api.GetJsonRandomLogParams) error {
+func (s Service) GetJsonRandomLog(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomLogParams) {
 	if params.Count == nil {
 		params.Count = new(int)
 		*params.Count = 1
@@ -24,7 +23,7 @@ func (s Service) GetJsonRandomLog(ctx echo.Context, params api.GetJsonRandomLogP
 	}
 
 	if len(*params.LogLevels) != len(*params.LogLevelWeights) {
-		return echo.NewHTTPError(http.StatusBadRequest, "logLevels and logLevelWeights must have the same length")
+		sendError(w, http.StatusBadRequest, "log levels and weights must have the same length")
 	}
 
 	logLevels := make(map[string]float32)
@@ -32,16 +31,15 @@ func (s Service) GetJsonRandomLog(ctx echo.Context, params api.GetJsonRandomLogP
 		logLevels[level] = (*params.LogLevelWeights)[i]
 	}
 
-	ctx.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
-
-	return ctx.String(http.StatusOK, random.NewLog(*params.Count, logLevels).String())
+	prepareJSON(w, http.StatusOK)
+	_, _ = w.Write([]byte(random.NewLog(*params.Count, logLevels).String()))
 }
 
-func (s Service) GetJsonRandomAddress(ctx echo.Context, params api.GetJsonRandomAddressParams) error {
-	return ctx.JSON(http.StatusOK, random.Address())
+func (s Service) GetJsonRandomAddress(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomAddressParams) {
+	sendJSON(w, http.StatusOK, random.Address())
 }
 
-func (s Service) GetJsonRandomAddresses(ctx echo.Context, params api.GetJsonRandomAddressesParams) error {
+func (s Service) GetJsonRandomAddresses(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomAddressesParams) {
 	if params.Count == nil {
 		params.Count = new(int)
 		*params.Count = 10
@@ -52,14 +50,14 @@ func (s Service) GetJsonRandomAddresses(ctx echo.Context, params api.GetJsonRand
 		addresses[i] = random.Address()
 	}
 
-	return ctx.JSON(http.StatusOK, addresses)
+	sendJSON(w, http.StatusOK, addresses)
 }
 
-func (s Service) GetJsonRandomContact(ctx echo.Context, params api.GetJsonRandomContactParams) error {
-	return ctx.JSON(http.StatusOK, random.Contact())
+func (s Service) GetJsonRandomContact(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomContactParams) {
+	sendJSON(w, http.StatusOK, random.Contact())
 }
 
-func (s Service) GetJsonRandomContacts(ctx echo.Context, params api.GetJsonRandomContactsParams) error {
+func (s Service) GetJsonRandomContacts(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomContactsParams) {
 	if params.Count == nil {
 		params.Count = new(int)
 		*params.Count = 10
@@ -70,18 +68,18 @@ func (s Service) GetJsonRandomContacts(ctx echo.Context, params api.GetJsonRando
 		contacts[i] = random.Contact()
 	}
 
-	return ctx.JSON(http.StatusOK, contacts)
+	sendJSON(w, http.StatusOK, contacts)
 }
 
-func (s Service) GetJsonRandom(c echo.Context, params api.GetJsonRandomParams) error {
+func (s Service) GetJsonRandom(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomParams) {
 	panic("not implemented")
 }
 
-func (s Service) GetJsonRandomUser(ctx echo.Context, params api.GetJsonRandomUserParams) error {
-	return ctx.JSON(http.StatusOK, random.User())
+func (s Service) GetJsonRandomUser(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomUserParams) {
+	sendJSON(w, http.StatusOK, random.User())
 }
 
-func (s Service) GetJsonRandomUsers(ctx echo.Context, params api.GetJsonRandomUsersParams) error {
+func (s Service) GetJsonRandomUsers(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomUsersParams) {
 	if params.Count == nil {
 		params.Count = new(int)
 		*params.Count = 10
@@ -92,5 +90,5 @@ func (s Service) GetJsonRandomUsers(ctx echo.Context, params api.GetJsonRandomUs
 		users[i] = random.User()
 	}
 
-	return ctx.JSON(http.StatusOK, users)
+	sendJSON(w, http.StatusOK, users)
 }
