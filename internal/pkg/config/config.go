@@ -13,7 +13,7 @@ import (
 type Config struct {
 	LogLevel  string        `env:"LOG_LEVEL" envDefault:"info"`
 	LogFormat string        `env:"LOG_FORMAT" envDefault:"logfmt"`
-	Addr      string        `env:"ADDR" envDefault:":8080"`
+	Addr      string        `env:"ADDR" envDefault:"0.0.0.0:8080"`
 	Timeout   time.Duration `env:"TIMEOUT" envDefault:"2m"`
 }
 
