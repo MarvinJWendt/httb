@@ -68,6 +68,30 @@ paths:
       description: Returns JSON data.
       parameters:
         - $ref: '#/components/parameters/DelayParam'
+        - name: maxDepth
+          in: query
+          description: "Maximum depth of the JSON object"
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            default: 3
+        - name: minDepth
+          in: query
+          description: "Minimum depth of the JSON object"
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 3
+            default: 1
+        - name: maxElems
+          in: query
+          description: "Maximum number of elements per JSON object"
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 3
       responses:
         '200':
           description: JSON data.
@@ -247,130 +271,172 @@ paths:
               schema:
                 $ref: '#/components/schemas/Log'
 
-# --- HTTP Methods ---
-  /method/get:
+  # --- Return Request Data ---
+  /return:
     get:
       tags:
-        - HTTP Methods
-      summary: "GET method."
-      description: "Returns which method was used to access this endpoint."
+        - Return Request Data
+      summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
         - $ref: '#/components/parameters/FormatParam'
       responses:
         '200':
-          description: "Method used"
+          description: "Request data"
           content:
-            text/plain:
-              schema:
-                type: string
-                example: "GET"
             application/json:
               schema:
                 type: object
-                properties:
-                  method:
-                    type: string
-                    example: "GET"
-  /method/post:
     post:
       tags:
-        - HTTP Methods
-      summary: "POST method."
-      description: "Returns which method was used to access this endpoint."
+        - Return Request Data
+      summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
         - $ref: '#/components/parameters/FormatParam'
       responses:
         '200':
-          description: "Method used"
+          description: "Request data"
           content:
-            text/plain:
-              schema:
-                type: string
-                example: "POST"
             application/json:
               schema:
                 type: object
-                properties:
-                  method:
-                    type: string
-                    example: "POST"
-  /method/put:
     put:
       tags:
-        - HTTP Methods
-      summary: "PUT method."
-      description: "Returns which method was used to access this endpoint."
+        - Return Request Data
+      summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
         - $ref: '#/components/parameters/FormatParam'
       responses:
         '200':
-          description: "Method used"
+          description: "Request data"
           content:
-            text/plain:
-              schema:
-                type: string
-                example: "PUT"
             application/json:
               schema:
                 type: object
-                properties:
-                  method:
-                    type: string
-                    example: "PUT"
-  /method/patch:
     patch:
       tags:
-        - HTTP Methods
-      summary: "PATCH method."
-      description: "Returns which method was used to access this endpoint."
+        - Return Request Data
+      summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
         - $ref: '#/components/parameters/FormatParam'
       responses:
         '200':
-          description: "Method used"
+          description: "Request data"
           content:
-            text/plain:
-              schema:
-                type: string
-                example: "PATCH"
             application/json:
               schema:
                 type: object
-                properties:
-                  method:
-                    type: string
-                    example: "PATCH"
-  /method/delete:
     delete:
       tags:
-        - HTTP Methods
-      summary: "DELETE method."
-      description: "Returns which method was used to access this endpoint."
+        - Return Request Data
+      summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
         - $ref: '#/components/parameters/FormatParam'
       responses:
         '200':
-          description: "Method used"
+          description: "Request data"
           content:
-            text/plain:
-              schema:
-                type: string
-                example: "DELETE"
             application/json:
               schema:
                 type: object
-                properties:
-                  method:
-                    type: string
-                    example: "DELETE"
+
+  # --- Status ---
+  /status/{status}:
+    parameters:
+      - name: status
+        in: path
+        description: "HTTP status code that should be returned."
+        required: true
+        schema:
+          type: integer
+          minimum: 100
+          maximum: 599
+    get:
+      tags:
+        - Status Codes
+      summary: "Returns the specified HTTP status code and status message"
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        default:
+          description: "HTTP status code and status message"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCodeMessage'
+    post:
+      tags:
+        - Status Codes
+      summary: "Returns the specified HTTP status code and status message"
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        default:
+          description: "HTTP status code and status message"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCodeMessage'
+    put:
+      tags:
+        - Status Codes
+      summary: "Returns the specified HTTP status code and status message"
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        default:
+          description: "HTTP status code and status message"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCodeMessage'
+    patch:
+      tags:
+        - Status Codes
+      summary: "Returns the specified HTTP status code and status message"
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        default:
+          description: "HTTP status code and status message"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCodeMessage'
+    delete:
+      tags:
+        - Status Codes
+      summary: "Returns the specified HTTP status code and status message"
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        default:
+          description: "HTTP status code and status message"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusCodeMessage'
 
 components:
   schemas:
+    StatusCodeMessage:
+      description: "Status code and status message"
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Not Found"
+          description: "Status code message"
+        status:
+          type: integer
+          description: "Status code"
+          example: 404
+          minimum: 100
+          maximum: 599
     Address:
       type: object
       properties:
@@ -513,8 +579,6 @@ tags:
     description: "Endpoints providing meta functionality."
   - name: Return Request Data
     description: "Endpoints returning the received request data."
-  - name: HTTP Methods
-    description: "Endpoints to test different HTTP methods."
   - name: Status Codes
     description: "Endpoints to test various HTTP status codes."
   - name: JSON

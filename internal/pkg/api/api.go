@@ -27,40 +27,40 @@ const (
 	FormatParamText FormatParam = "text"
 )
 
-// Defines values for DeleteMethodDeleteParamsFormat.
-const (
-	DeleteMethodDeleteParamsFormatJson DeleteMethodDeleteParamsFormat = "json"
-	DeleteMethodDeleteParamsFormatText DeleteMethodDeleteParamsFormat = "text"
-)
-
-// Defines values for GetMethodGetParamsFormat.
-const (
-	GetMethodGetParamsFormatJson GetMethodGetParamsFormat = "json"
-	GetMethodGetParamsFormatText GetMethodGetParamsFormat = "text"
-)
-
-// Defines values for PatchMethodPatchParamsFormat.
-const (
-	PatchMethodPatchParamsFormatJson PatchMethodPatchParamsFormat = "json"
-	PatchMethodPatchParamsFormatText PatchMethodPatchParamsFormat = "text"
-)
-
-// Defines values for PostMethodPostParamsFormat.
-const (
-	PostMethodPostParamsFormatJson PostMethodPostParamsFormat = "json"
-	PostMethodPostParamsFormatText PostMethodPostParamsFormat = "text"
-)
-
-// Defines values for PutMethodPutParamsFormat.
-const (
-	PutMethodPutParamsFormatJson PutMethodPutParamsFormat = "json"
-	PutMethodPutParamsFormatText PutMethodPutParamsFormat = "text"
-)
-
 // Defines values for GetPingParamsFormat.
 const (
-	Json GetPingParamsFormat = "json"
-	Text GetPingParamsFormat = "text"
+	GetPingParamsFormatJson GetPingParamsFormat = "json"
+	GetPingParamsFormatText GetPingParamsFormat = "text"
+)
+
+// Defines values for DeleteReturnParamsFormat.
+const (
+	DeleteReturnParamsFormatJson DeleteReturnParamsFormat = "json"
+	DeleteReturnParamsFormatText DeleteReturnParamsFormat = "text"
+)
+
+// Defines values for GetReturnParamsFormat.
+const (
+	GetReturnParamsFormatJson GetReturnParamsFormat = "json"
+	GetReturnParamsFormatText GetReturnParamsFormat = "text"
+)
+
+// Defines values for PatchReturnParamsFormat.
+const (
+	PatchReturnParamsFormatJson PatchReturnParamsFormat = "json"
+	PatchReturnParamsFormatText PatchReturnParamsFormat = "text"
+)
+
+// Defines values for PostReturnParamsFormat.
+const (
+	PostReturnParamsFormatJson PostReturnParamsFormat = "json"
+	PostReturnParamsFormatText PostReturnParamsFormat = "text"
+)
+
+// Defines values for PutReturnParamsFormat.
+const (
+	Json PutReturnParamsFormat = "json"
+	Text PutReturnParamsFormat = "text"
 )
 
 // Address defines model for Address.
@@ -81,6 +81,15 @@ type Log struct {
 	Level     *string    `fake:"{weighted:[debug,info,warn,error],[1,5,3,2]}" json:"level,omitempty"`
 	Message   *string    `fake:"{hackerphrase}" json:"message,omitempty"`
 	Timestamp *time.Time `json:"timestamp,omitempty"`
+}
+
+// StatusCodeMessage Status code and status message
+type StatusCodeMessage struct {
+	// Message Status code message
+	Message *string `json:"message,omitempty"`
+
+	// Status Status code
+	Status *int `json:"status,omitempty"`
 }
 
 // User defines model for User.
@@ -118,6 +127,15 @@ type StreamInterval = int
 type GetJsonRandomParams struct {
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// MaxDepth Maximum depth of the JSON object
+	MaxDepth *int `form:"maxDepth,omitempty" json:"maxDepth,omitempty"`
+
+	// MinDepth Minimum depth of the JSON object
+	MinDepth *int `form:"minDepth,omitempty" json:"minDepth,omitempty"`
+
+	// MaxElems Maximum number of elements per JSON object
+	MaxElems *int `form:"maxElems,omitempty" json:"maxElems,omitempty"`
 }
 
 // GetJsonRandomAddressParams defines parameters for GetJsonRandomAddress.
@@ -180,66 +198,6 @@ type GetJsonRandomUsersParams struct {
 	Count *Count `form:"count,omitempty" json:"count,omitempty"`
 }
 
-// DeleteMethodDeleteParams defines parameters for DeleteMethodDelete.
-type DeleteMethodDeleteParams struct {
-	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
-	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
-
-	// Format Response format (default: `json`)
-	Format *DeleteMethodDeleteParamsFormat `form:"format,omitempty" json:"format,omitempty"`
-}
-
-// DeleteMethodDeleteParamsFormat defines parameters for DeleteMethodDelete.
-type DeleteMethodDeleteParamsFormat string
-
-// GetMethodGetParams defines parameters for GetMethodGet.
-type GetMethodGetParams struct {
-	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
-	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
-
-	// Format Response format (default: `json`)
-	Format *GetMethodGetParamsFormat `form:"format,omitempty" json:"format,omitempty"`
-}
-
-// GetMethodGetParamsFormat defines parameters for GetMethodGet.
-type GetMethodGetParamsFormat string
-
-// PatchMethodPatchParams defines parameters for PatchMethodPatch.
-type PatchMethodPatchParams struct {
-	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
-	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
-
-	// Format Response format (default: `json`)
-	Format *PatchMethodPatchParamsFormat `form:"format,omitempty" json:"format,omitempty"`
-}
-
-// PatchMethodPatchParamsFormat defines parameters for PatchMethodPatch.
-type PatchMethodPatchParamsFormat string
-
-// PostMethodPostParams defines parameters for PostMethodPost.
-type PostMethodPostParams struct {
-	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
-	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
-
-	// Format Response format (default: `json`)
-	Format *PostMethodPostParamsFormat `form:"format,omitempty" json:"format,omitempty"`
-}
-
-// PostMethodPostParamsFormat defines parameters for PostMethodPost.
-type PostMethodPostParamsFormat string
-
-// PutMethodPutParams defines parameters for PutMethodPut.
-type PutMethodPutParams struct {
-	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
-	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
-
-	// Format Response format (default: `json`)
-	Format *PutMethodPutParamsFormat `form:"format,omitempty" json:"format,omitempty"`
-}
-
-// PutMethodPutParamsFormat defines parameters for PutMethodPut.
-type PutMethodPutParamsFormat string
-
 // GetPingParams defines parameters for GetPing.
 type GetPingParams struct {
 	// Format Response format (default: `json`)
@@ -251,6 +209,96 @@ type GetPingParams struct {
 
 // GetPingParamsFormat defines parameters for GetPing.
 type GetPingParamsFormat string
+
+// DeleteReturnParams defines parameters for DeleteReturn.
+type DeleteReturnParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Format Response format (default: `json`)
+	Format *DeleteReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+}
+
+// DeleteReturnParamsFormat defines parameters for DeleteReturn.
+type DeleteReturnParamsFormat string
+
+// GetReturnParams defines parameters for GetReturn.
+type GetReturnParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Format Response format (default: `json`)
+	Format *GetReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+}
+
+// GetReturnParamsFormat defines parameters for GetReturn.
+type GetReturnParamsFormat string
+
+// PatchReturnParams defines parameters for PatchReturn.
+type PatchReturnParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Format Response format (default: `json`)
+	Format *PatchReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+}
+
+// PatchReturnParamsFormat defines parameters for PatchReturn.
+type PatchReturnParamsFormat string
+
+// PostReturnParams defines parameters for PostReturn.
+type PostReturnParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Format Response format (default: `json`)
+	Format *PostReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+}
+
+// PostReturnParamsFormat defines parameters for PostReturn.
+type PostReturnParamsFormat string
+
+// PutReturnParams defines parameters for PutReturn.
+type PutReturnParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+
+	// Format Response format (default: `json`)
+	Format *PutReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+}
+
+// PutReturnParamsFormat defines parameters for PutReturn.
+type PutReturnParamsFormat string
+
+// DeleteStatusStatusParams defines parameters for DeleteStatusStatus.
+type DeleteStatusStatusParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
+// GetStatusStatusParams defines parameters for GetStatusStatus.
+type GetStatusStatusParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
+// PatchStatusStatusParams defines parameters for PatchStatusStatus.
+type PatchStatusStatusParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
+// PostStatusStatusParams defines parameters for PostStatusStatus.
+type PostStatusStatusParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
+// PutStatusStatusParams defines parameters for PutStatusStatus.
+type PutStatusStatusParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
 
 // GetStreamJsonLogsParams defines parameters for GetStreamJsonLogs.
 type GetStreamJsonLogsParams struct {
@@ -302,24 +350,39 @@ type ServerInterface interface {
 	// Returns random user data.
 	// (GET /json/random/users)
 	GetJsonRandomUsers(w http.ResponseWriter, r *http.Request, params GetJsonRandomUsersParams)
-	// DELETE method.
-	// (DELETE /method/delete)
-	DeleteMethodDelete(w http.ResponseWriter, r *http.Request, params DeleteMethodDeleteParams)
-	// GET method.
-	// (GET /method/get)
-	GetMethodGet(w http.ResponseWriter, r *http.Request, params GetMethodGetParams)
-	// PATCH method.
-	// (PATCH /method/patch)
-	PatchMethodPatch(w http.ResponseWriter, r *http.Request, params PatchMethodPatchParams)
-	// POST method.
-	// (POST /method/post)
-	PostMethodPost(w http.ResponseWriter, r *http.Request, params PostMethodPostParams)
-	// PUT method.
-	// (PUT /method/put)
-	PutMethodPut(w http.ResponseWriter, r *http.Request, params PutMethodPutParams)
 	// Returns "pong"
 	// (GET /ping)
 	GetPing(w http.ResponseWriter, r *http.Request, params GetPingParams)
+	// Returns the request data as JSON
+	// (DELETE /return)
+	DeleteReturn(w http.ResponseWriter, r *http.Request, params DeleteReturnParams)
+	// Returns the request data as JSON
+	// (GET /return)
+	GetReturn(w http.ResponseWriter, r *http.Request, params GetReturnParams)
+	// Returns the request data as JSON
+	// (PATCH /return)
+	PatchReturn(w http.ResponseWriter, r *http.Request, params PatchReturnParams)
+	// Returns the request data as JSON
+	// (POST /return)
+	PostReturn(w http.ResponseWriter, r *http.Request, params PostReturnParams)
+	// Returns the request data as JSON
+	// (PUT /return)
+	PutReturn(w http.ResponseWriter, r *http.Request, params PutReturnParams)
+	// Returns the specified HTTP status code and status message
+	// (DELETE /status/{status})
+	DeleteStatusStatus(w http.ResponseWriter, r *http.Request, status int, params DeleteStatusStatusParams)
+	// Returns the specified HTTP status code and status message
+	// (GET /status/{status})
+	GetStatusStatus(w http.ResponseWriter, r *http.Request, status int, params GetStatusStatusParams)
+	// Returns the specified HTTP status code and status message
+	// (PATCH /status/{status})
+	PatchStatusStatus(w http.ResponseWriter, r *http.Request, status int, params PatchStatusStatusParams)
+	// Returns the specified HTTP status code and status message
+	// (POST /status/{status})
+	PostStatusStatus(w http.ResponseWriter, r *http.Request, status int, params PostStatusStatusParams)
+	// Returns the specified HTTP status code and status message
+	// (PUT /status/{status})
+	PutStatusStatus(w http.ResponseWriter, r *http.Request, status int, params PutStatusStatusParams)
 	// Streams JSON logs.
 	// (GET /stream/json/logs)
 	GetStreamJsonLogs(w http.ResponseWriter, r *http.Request, params GetStreamJsonLogsParams)
@@ -350,6 +413,30 @@ func (siw *ServerInterfaceWrapper) GetJsonRandom(w http.ResponseWriter, r *http.
 	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
 	if err != nil {
 		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "maxDepth" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "maxDepth", r.URL.Query(), &params.MaxDepth)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "maxDepth", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "minDepth" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "minDepth", r.URL.Query(), &params.MinDepth)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "minDepth", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "maxElems" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "maxElems", r.URL.Query(), &params.MaxElems)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "maxElems", Err: err})
 		return
 	}
 
@@ -601,181 +688,6 @@ func (siw *ServerInterfaceWrapper) GetJsonRandomUsers(w http.ResponseWriter, r *
 	handler.ServeHTTP(w, r)
 }
 
-// DeleteMethodDelete operation middleware
-func (siw *ServerInterfaceWrapper) DeleteMethodDelete(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params DeleteMethodDeleteParams
-
-	// ------------- Optional query parameter "delay" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
-		return
-	}
-
-	// ------------- Optional query parameter "format" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteMethodDelete(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// GetMethodGet operation middleware
-func (siw *ServerInterfaceWrapper) GetMethodGet(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params GetMethodGetParams
-
-	// ------------- Optional query parameter "delay" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
-		return
-	}
-
-	// ------------- Optional query parameter "format" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetMethodGet(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PatchMethodPatch operation middleware
-func (siw *ServerInterfaceWrapper) PatchMethodPatch(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params PatchMethodPatchParams
-
-	// ------------- Optional query parameter "delay" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
-		return
-	}
-
-	// ------------- Optional query parameter "format" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PatchMethodPatch(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PostMethodPost operation middleware
-func (siw *ServerInterfaceWrapper) PostMethodPost(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params PostMethodPostParams
-
-	// ------------- Optional query parameter "delay" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
-		return
-	}
-
-	// ------------- Optional query parameter "format" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostMethodPost(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PutMethodPut operation middleware
-func (siw *ServerInterfaceWrapper) PutMethodPut(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params PutMethodPutParams
-
-	// ------------- Optional query parameter "delay" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
-		return
-	}
-
-	// ------------- Optional query parameter "format" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PutMethodPut(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
 // GetPing operation middleware
 func (siw *ServerInterfaceWrapper) GetPing(w http.ResponseWriter, r *http.Request) {
 
@@ -802,6 +714,361 @@ func (siw *ServerInterfaceWrapper) GetPing(w http.ResponseWriter, r *http.Reques
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetPing(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteReturn operation middleware
+func (siw *ServerInterfaceWrapper) DeleteReturn(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteReturnParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "format" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteReturn(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetReturn operation middleware
+func (siw *ServerInterfaceWrapper) GetReturn(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetReturnParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "format" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetReturn(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PatchReturn operation middleware
+func (siw *ServerInterfaceWrapper) PatchReturn(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PatchReturnParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "format" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PatchReturn(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostReturn operation middleware
+func (siw *ServerInterfaceWrapper) PostReturn(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostReturnParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "format" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostReturn(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PutReturn operation middleware
+func (siw *ServerInterfaceWrapper) PutReturn(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutReturnParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "format" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "format", r.URL.Query(), &params.Format)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "format", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutReturn(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteStatusStatus operation middleware
+func (siw *ServerInterfaceWrapper) DeleteStatusStatus(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "status" -------------
+	var status int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "status", r.PathValue("status"), &status, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "status", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteStatusStatusParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteStatusStatus(w, r, status, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetStatusStatus operation middleware
+func (siw *ServerInterfaceWrapper) GetStatusStatus(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "status" -------------
+	var status int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "status", r.PathValue("status"), &status, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "status", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetStatusStatusParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetStatusStatus(w, r, status, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PatchStatusStatus operation middleware
+func (siw *ServerInterfaceWrapper) PatchStatusStatus(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "status" -------------
+	var status int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "status", r.PathValue("status"), &status, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "status", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PatchStatusStatusParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PatchStatusStatus(w, r, status, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostStatusStatus operation middleware
+func (siw *ServerInterfaceWrapper) PostStatusStatus(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "status" -------------
+	var status int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "status", r.PathValue("status"), &status, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "status", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostStatusStatusParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostStatusStatus(w, r, status, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PutStatusStatus operation middleware
+func (siw *ServerInterfaceWrapper) PutStatusStatus(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "status" -------------
+	var status int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "status", r.PathValue("status"), &status, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "status", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutStatusStatusParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutStatusStatus(w, r, status, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1025,12 +1292,17 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/log", wrapper.GetJsonRandomLog)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/user", wrapper.GetJsonRandomUser)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/users", wrapper.GetJsonRandomUsers)
-	m.HandleFunc("DELETE "+options.BaseURL+"/method/delete", wrapper.DeleteMethodDelete)
-	m.HandleFunc("GET "+options.BaseURL+"/method/get", wrapper.GetMethodGet)
-	m.HandleFunc("PATCH "+options.BaseURL+"/method/patch", wrapper.PatchMethodPatch)
-	m.HandleFunc("POST "+options.BaseURL+"/method/post", wrapper.PostMethodPost)
-	m.HandleFunc("PUT "+options.BaseURL+"/method/put", wrapper.PutMethodPut)
 	m.HandleFunc("GET "+options.BaseURL+"/ping", wrapper.GetPing)
+	m.HandleFunc("DELETE "+options.BaseURL+"/return", wrapper.DeleteReturn)
+	m.HandleFunc("GET "+options.BaseURL+"/return", wrapper.GetReturn)
+	m.HandleFunc("PATCH "+options.BaseURL+"/return", wrapper.PatchReturn)
+	m.HandleFunc("POST "+options.BaseURL+"/return", wrapper.PostReturn)
+	m.HandleFunc("PUT "+options.BaseURL+"/return", wrapper.PutReturn)
+	m.HandleFunc("DELETE "+options.BaseURL+"/status/{status}", wrapper.DeleteStatusStatus)
+	m.HandleFunc("GET "+options.BaseURL+"/status/{status}", wrapper.GetStatusStatus)
+	m.HandleFunc("PATCH "+options.BaseURL+"/status/{status}", wrapper.PatchStatusStatus)
+	m.HandleFunc("POST "+options.BaseURL+"/status/{status}", wrapper.PostStatusStatus)
+	m.HandleFunc("PUT "+options.BaseURL+"/status/{status}", wrapper.PutStatusStatus)
 	m.HandleFunc("GET "+options.BaseURL+"/stream/json/logs", wrapper.GetStreamJsonLogs)
 	m.HandleFunc("GET "+options.BaseURL+"/stream/json/user", wrapper.GetStreamJsonUser)
 
