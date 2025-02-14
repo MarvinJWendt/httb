@@ -486,6 +486,8 @@ components:
           minimum: 0
           maximum: 100
           example: 42
+          x-oapi-codegen-extra-tags:
+            fake: "{number:0,100}"
         gender:
           type: string
           enum:
