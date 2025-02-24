@@ -95,7 +95,7 @@ type StatusCodeMessage struct {
 // User defines model for User.
 type User struct {
 	Address   *Address    `json:"address,omitempty"`
-	Age       *int        `json:"age,omitempty"`
+	Age       *int        `fake:"{number:0,100}" json:"age,omitempty"`
 	Contact   *Contact    `json:"contact,omitempty"`
 	FirstName *string     `fake:"{firstname}" json:"firstName,omitempty"`
 	Gender    *UserGender `fake:"{randomstring:[male,female,other]}" json:"gender,omitempty"`
@@ -104,6 +104,22 @@ type User struct {
 
 // UserGender defines model for User.Gender.
 type UserGender string
+
+// ValidationError defines model for ValidationError.
+type ValidationError struct {
+	Errors     *ValidationMessages `json:"errors,omitempty"`
+	Message    string              `json:"message"`
+	StatusCode int                 `json:"status_code"`
+}
+
+// ValidationMessage defines model for ValidationMessage.
+type ValidationMessage struct {
+	Field   string `json:"field"`
+	Message string `json:"message"`
+}
+
+// ValidationMessages defines model for ValidationMessages.
+type ValidationMessages = []ValidationMessage
 
 // Count defines model for Count.
 type Count = int
@@ -129,13 +145,13 @@ type GetJsonRandomParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// MaxDepth Maximum depth of the JSON object
-	MaxDepth *int `form:"maxDepth,omitempty" json:"maxDepth,omitempty"`
+	MaxDepth *int `form:"maxDepth,omitempty" json:"maxDepth,omitempty" validate:"gt=1,lte=5"`
 
 	// MinDepth Minimum depth of the JSON object
-	MinDepth *int `form:"minDepth,omitempty" json:"minDepth,omitempty"`
+	MinDepth *int `form:"minDepth,omitempty" json:"minDepth,omitempty" validate:"gt=0,lte=3"`
 
 	// MaxElems Maximum number of elements per JSON object
-	MaxElems *int `form:"maxElems,omitempty" json:"maxElems,omitempty"`
+	MaxElems *int `form:"maxElems,omitempty" json:"maxElems,omitempty" validate:"gt=0,lte=10"`
 }
 
 // GetJsonRandomAddressParams defines parameters for GetJsonRandomAddress.
@@ -150,7 +166,7 @@ type GetJsonRandomAddressesParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Count Number of entries to return (min: 1; max: 10000)
-	Count *Count `form:"count,omitempty" json:"count,omitempty"`
+	Count *Count `default:"10" form:"count,omitempty" json:"count,omitempty" validate:"gt=1,lte=10000"`
 }
 
 // GetJsonRandomContactParams defines parameters for GetJsonRandomContact.
@@ -165,7 +181,7 @@ type GetJsonRandomContactsParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Count Number of entries to return (min: 1; max: 10000)
-	Count *Count `form:"count,omitempty" json:"count,omitempty"`
+	Count *Count `default:"10" form:"count,omitempty" json:"count,omitempty" validate:"gt=1,lte=10000"`
 }
 
 // GetJsonRandomLogParams defines parameters for GetJsonRandomLog.
@@ -180,7 +196,7 @@ type GetJsonRandomLogParams struct {
 	LogLevelWeights *LogLevelWeights `form:"logLevelWeights,omitempty" json:"logLevelWeights,omitempty"`
 
 	// Count Number of log entries to return (min: 1; max: 10000)
-	Count *int `form:"count,omitempty" json:"count,omitempty"`
+	Count *int `form:"count,omitempty" json:"count,omitempty" validate:"gt=1,lte=10000"`
 }
 
 // GetJsonRandomUserParams defines parameters for GetJsonRandomUser.
@@ -195,7 +211,7 @@ type GetJsonRandomUsersParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Count Number of entries to return (min: 1; max: 10000)
-	Count *Count `form:"count,omitempty" json:"count,omitempty"`
+	Count *Count `default:"10" form:"count,omitempty" json:"count,omitempty" validate:"gt=1,lte=10000"`
 }
 
 // GetPingParams defines parameters for GetPing.

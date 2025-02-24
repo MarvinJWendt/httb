@@ -60,3 +60,7 @@ func sendFormattedResponse(w http.ResponseWriter, r *http.Request, text, keyName
 		sendError(w, http.StatusBadRequest, "invalid format")
 	}
 }
+
+func Ptr[A any](value A) *A {
+	return &value
+}
