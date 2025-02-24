@@ -95,7 +95,7 @@ type StatusCodeMessage struct {
 // User defines model for User.
 type User struct {
 	Address   *Address    `json:"address,omitempty"`
-	Age       *int        `json:"age,omitempty"`
+	Age       *int        `fake:"{number:0,100}" json:"age,omitempty"`
 	Contact   *Contact    `json:"contact,omitempty"`
 	FirstName *string     `fake:"{firstname}" json:"firstName,omitempty"`
 	Gender    *UserGender `fake:"{randomstring:[male,female,other]}" json:"gender,omitempty"`
