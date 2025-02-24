@@ -34,7 +34,12 @@ func init() {
 }
 
 func main() {
-	if err := service.NewService(cfg).Start(); err != nil {
+	svc, err := service.NewService(cfg)
+	if err != nil {
+		slog.Error("failed to init service", "error", err)
+	}
+
+	if err := svc.Start(); err != nil {
 		slog.Error("failed to start service", "error", err)
 	}
 }

@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/creasty/defaults"
 	"github.com/marvinjwendt/httb/internal/pkg/api"
 	"github.com/marvinjwendt/httb/internal/pkg/random"
 	"net/http"
@@ -97,8 +96,7 @@ func (s Service) GetJsonRandomUser(w http.ResponseWriter, r *http.Request, param
 }
 
 func (s Service) GetJsonRandomUsers(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomUsersParams) {
-	_ = defaults.Set(&params)
-	if ok := Validate[*api.GetJsonRandomUsersParams](w, &params); !ok {
+	if ok := s.Validate(w, &params); !ok {
 		return
 	}
 
