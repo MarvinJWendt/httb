@@ -1,21 +1,80 @@
-<!-- HTML for static distribution bundle build -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Swagger UI</title>
-    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
-    <link rel="stylesheet" type="text/css" href="./swagger-ui-dark.css" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>HTTB.dev | Docs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #1e2030;
+      color: #bfbfbf;
+    }
 
-    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
-  </head>
+    /* Navbar styles */
+    nav {
+      width: 100%;
+      background-color: #181926;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      height: 60px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 
-  <body>
-    <div id="swagger-ui"></div>
-    <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
-    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-    <script src="./swagger-initializer.js" charset="UTF-8"> </script>
-  </body>
+    /* Div containers for left and right sections */
+    .nav-left,
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    nav a {
+      color: #f5c2e7;
+      text-decoration: none;
+      padding: 10px 15px;
+      transition: color 0.3s ease;
+      font-size: 1.1rem;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 600;
+      margin-right: 15px;
+    }
+
+    nav a:hover {
+      color: #94e2d5;
+    }
+
+    /* Main content styles */
+    main {
+      margin-top: 60px; /* offset for fixed navbar */
+      height: calc(100% - 60px);
+    }
+  </style>
+
+  <link rel="stylesheet" type="text/css" href="./swagger-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="./swagger-ui-dark.css"/>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-left">
+      <a href="https://httb.dev">HTTB.dev</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://github.com/MarvinJWendt/httb">GitHub</a>
+    </div>
+  </nav>
+  <div id="swagger-ui"></div>
+  <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
+  <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+  <script src="./swagger-initializer.js" charset="UTF-8"> </script>
+</body>
 </html>
 

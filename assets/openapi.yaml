@@ -1,9 +1,5 @@
 openapi: 3.0.3
 
-externalDocs:
-  url: https://httb.dev
-  description: "httb.dev"
-
 info:
   title: HTTB.dev API Docs
   version: unstable
@@ -11,9 +7,6 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  contact:
-    name: GitHub
-    url: https://github.com/MarvinJWendt/httb
 
 servers:
   - url: "{{.SwaggerDefaultServer}}"
