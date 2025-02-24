@@ -39,7 +39,7 @@ func initValidator() (*validator.Validate, ut.Translator, error) {
 	validate = validator.New()
 	err := entranslations.RegisterDefaultTranslations(validate, translator)
 	if err != nil {
-		return nil, nil, fmt.Errorf("registering default translation")
+		return nil, nil, fmt.Errorf("failed to register default translation: %w", err)
 	}
 	return validate, translator, nil
 }
