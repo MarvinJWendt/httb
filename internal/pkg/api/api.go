@@ -145,13 +145,13 @@ type GetJsonRandomParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// MaxDepth Maximum depth of the JSON object
-	MaxDepth *int `form:"maxDepth,omitempty" json:"maxDepth,omitempty" validate:"gt=1,lte=5"`
+	MaxDepth *int `default:"3" form:"maxDepth,omitempty" json:"maxDepth,omitempty" validate:"gt=1,lte=5"`
 
 	// MinDepth Minimum depth of the JSON object
-	MinDepth *int `form:"minDepth,omitempty" json:"minDepth,omitempty" validate:"gt=0,lte=3"`
+	MinDepth *int `default:"1" form:"minDepth,omitempty" json:"minDepth,omitempty" validate:"gt=0,lte=3"`
 
 	// MaxElems Maximum number of elements per JSON object
-	MaxElems *int `form:"maxElems,omitempty" json:"maxElems,omitempty" validate:"gt=0,lte=10"`
+	MaxElems *int `default:"3" form:"maxElems,omitempty" json:"maxElems,omitempty" validate:"gt=0,lte=10"`
 }
 
 // GetJsonRandomAddressParams defines parameters for GetJsonRandomAddress.
@@ -190,13 +190,13 @@ type GetJsonRandomLogParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// LogLevels Log levels to use (default: `debug,info,warn,error`)
-	LogLevels *LogLevels `form:"logLevels,omitempty" json:"logLevels,omitempty"`
+	LogLevels *LogLevels `default:"[\"debug\",\"info\",\"warn\",\"error\"]" form:"logLevels,omitempty" json:"logLevels,omitempty"`
 
 	// LogLevelWeights Log level weights (default: `1,5,3,2`)
-	LogLevelWeights *LogLevelWeights `form:"logLevelWeights,omitempty" json:"logLevelWeights,omitempty"`
+	LogLevelWeights *LogLevelWeights `default:"[1, 5, 3, 2]" form:"logLevelWeights,omitempty" json:"logLevelWeights,omitempty"`
 
 	// Count Number of log entries to return (min: 1; max: 10000)
-	Count *int `form:"count,omitempty" json:"count,omitempty" validate:"gt=1,lte=10000"`
+	Count *int `default:"10" form:"count,omitempty" json:"count,omitempty" validate:"gt=1,lte=10000"`
 }
 
 // GetJsonRandomUserParams defines parameters for GetJsonRandomUser.
@@ -217,7 +217,7 @@ type GetJsonRandomUsersParams struct {
 // GetPingParams defines parameters for GetPing.
 type GetPingParams struct {
 	// Format Response format (default: `json`)
-	Format *GetPingParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+	Format *GetPingParamsFormat `form:"format,omitempty" json:"format,omitempty" validate:"oneOf=json,text"`
 
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
@@ -232,7 +232,7 @@ type DeleteReturnParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Format Response format (default: `json`)
-	Format *DeleteReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+	Format *DeleteReturnParamsFormat `form:"format,omitempty" json:"format,omitempty" validate:"oneOf=json,text"`
 }
 
 // DeleteReturnParamsFormat defines parameters for DeleteReturn.
@@ -244,7 +244,7 @@ type GetReturnParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Format Response format (default: `json`)
-	Format *GetReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+	Format *GetReturnParamsFormat `form:"format,omitempty" json:"format,omitempty" validate:"oneOf=json,text"`
 }
 
 // GetReturnParamsFormat defines parameters for GetReturn.
@@ -256,7 +256,7 @@ type PatchReturnParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Format Response format (default: `json`)
-	Format *PatchReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+	Format *PatchReturnParamsFormat `form:"format,omitempty" json:"format,omitempty" validate:"oneOf=json,text"`
 }
 
 // PatchReturnParamsFormat defines parameters for PatchReturn.
@@ -268,7 +268,7 @@ type PostReturnParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Format Response format (default: `json`)
-	Format *PostReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+	Format *PostReturnParamsFormat `form:"format,omitempty" json:"format,omitempty" validate:"oneOf=json,text"`
 }
 
 // PostReturnParamsFormat defines parameters for PostReturn.
@@ -280,7 +280,7 @@ type PutReturnParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// Format Response format (default: `json`)
-	Format *PutReturnParamsFormat `form:"format,omitempty" json:"format,omitempty"`
+	Format *PutReturnParamsFormat `form:"format,omitempty" json:"format,omitempty" validate:"oneOf=json,text"`
 }
 
 // PutReturnParamsFormat defines parameters for PutReturn.
@@ -322,10 +322,10 @@ type GetStreamJsonLogsParams struct {
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
 
 	// LogLevels Log levels to use (default: `debug,info,warn,error`)
-	LogLevels *LogLevels `form:"logLevels,omitempty" json:"logLevels,omitempty"`
+	LogLevels *LogLevels `default:"[\"debug\",\"info\",\"warn\",\"error\"]" form:"logLevels,omitempty" json:"logLevels,omitempty"`
 
 	// LogLevelWeights Log level weights (default: `1,5,3,2`)
-	LogLevelWeights *LogLevelWeights `form:"logLevelWeights,omitempty" json:"logLevelWeights,omitempty"`
+	LogLevelWeights *LogLevelWeights `default:"[1, 5, 3, 2]" form:"logLevelWeights,omitempty" json:"logLevelWeights,omitempty"`
 
 	// Interval Interval in milliseconds between streamed responses (min: 0; max: 5000)
 	Interval *StreamInterval `form:"interval,omitempty" json:"interval,omitempty"`

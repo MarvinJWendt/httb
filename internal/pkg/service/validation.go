@@ -2,6 +2,8 @@ package service
 
 import (
 	"errors"
+	"fmt"
+	"github.com/creasty/defaults"
 	"github.com/go-playground/validator/v10"
 	"github.com/marvinjwendt/httb/internal/pkg/api"
 	"net/http"
@@ -9,8 +11,17 @@ import (
 )
 
 func (s Service) Validate(w http.ResponseWriter, data any) bool {
-	// Validate the struct
-	if err := s.validator.Struct(data); err != nil {
+	err := defaults.Set(data)
+	if err != nil {
+		sendJSON(w, http.StatusInternalServerError, api.ValidationError{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("error setting default value: %s", err.Error()),
+		})
+		return false
+	}
+
+	err = s.validator.Struct(data)
+	if err != nil {
 		var invalidValidationError *validator.InvalidValidationError
 		if errors.As(err, &invalidValidationError) {
 			sendJSON(w, http.StatusBadRequest, api.ValidationError{
@@ -24,9 +35,9 @@ func (s Service) Validate(w http.ResponseWriter, data any) bool {
 		errors.As(err, &errorsMap)
 		translatedErrors := errorsMap.Translate(s.translator)
 		for k, v := range translatedErrors {
-			x := strings.Split(k, ".")
+			keySplit := strings.Split(k, ".")
 			result = append(result, api.ValidationMessage{
-				Field:   strings.ToLower(x[len(x)-1]),
+				Field:   strings.ToLower(keySplit[len(keySplit)-1]),
 				Message: v,
 			})
 		}

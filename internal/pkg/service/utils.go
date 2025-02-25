@@ -18,7 +18,7 @@ func prepareJSON(w http.ResponseWriter, statusCode int) {
 	w.WriteHeader(statusCode)
 }
 
-func sendJSON(w http.ResponseWriter, statusCode int, data interface{}) {
+func sendJSON(w http.ResponseWriter, statusCode int, data any) {
 	prepareJSON(w, statusCode)
 	_ = json.NewEncoder(w).Encode(data)
 }
