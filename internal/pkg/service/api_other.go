@@ -5,6 +5,6 @@ import (
 	"net/http"
 )
 
-func (s Service) GetPing(w http.ResponseWriter, r *http.Request, _ api.GetPingParams) {
+func (s Service) GetPing(w http.ResponseWriter, r *http.Request, params api.GetPingParams) {
 	sendFormattedResponse(w, r, "pong", "message")
 }

@@ -7,12 +7,18 @@ import (
 )
 
 func (s Service) GetStreamJsonUser(w http.ResponseWriter, r *http.Request, params api.GetStreamJsonUserParams) {
+	if ok := s.Validate(w, &params); !ok {
+		return
+	}
 	s.streamJSON(w, r, params.Interval, func() (any, error) {
 		return random.User(), nil
 	})
 }
 
 func (s Service) GetStreamJsonLogs(w http.ResponseWriter, r *http.Request, params api.GetStreamJsonLogsParams) {
+	if ok := s.Validate(w, &params); !ok {
+		return
+	}
 	s.streamJSON(w, r, params.Interval, func() (any, error) {
 		return random.NewLog(1, nil)[0], nil // TODO: add log levels
 	})
