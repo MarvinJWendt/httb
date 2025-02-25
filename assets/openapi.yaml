@@ -247,7 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/ValidationError'
+                $ref: '#/components/schemas/ValidationError'
 
   # --- Streaming Endpoints ---
   /stream/json/user:
@@ -297,7 +297,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -311,7 +315,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -325,7 +333,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -339,7 +351,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -353,7 +369,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -363,9 +383,9 @@ paths:
                 type: object
 
   # --- Status ---
-  /status/{status}:
+  /status/{code}:
     parameters:
-      - name: status
+      - name: code
         in: path
         description: "HTTP status code that should be returned."
         required: true
@@ -373,8 +393,6 @@ paths:
           type: integer
           minimum: 100
           maximum: 599
-        x-oapi-codegen-extra-tags:
-          validate: gt=100,lte=599
     get:
       tags:
         - Status Codes
@@ -575,6 +593,7 @@ components:
         default: json
       x-oapi-codegen-extra-tags:
         validate: oneOf=json,text
+        default: "json"
     DelayParam:
       name: delay
       in: query
@@ -585,6 +604,18 @@ components:
         minimum: 0
         maximum: 10000
         default: 0
+    StatusParam:
+      name: status
+      in: query
+      description: "HTTP status code that should be returned."
+      schema:
+        type: integer
+        minimum: 100
+        maximum: 599
+        default: 200
+      x-oapi-codegen-extra-tags:
+        validate: gt=100,lte=599
+        default: "200"
     LogLevels:
       name: logLevels
       in: query
@@ -595,7 +626,7 @@ components:
           type: string
         default: [ debug, info, warn, error ]
       x-oapi-codegen-extra-tags:
-        default: '[\"debug\",\"info\",\"warn\",\"error\"]'
+        default: '[\" debug\",\" info\",\" warn\",\" error\" ]'
     LogLevelWeights:
       name: logLevelWeights
       in: query
@@ -616,6 +647,9 @@ components:
         minimum: 0
         maximum: 5000
         default: 250
+      x-oapi-codegen-extra-tags:
+        validate: gt=0,lte=5000
+        default: "250"
     Count:
       name: count
       in: query

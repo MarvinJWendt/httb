@@ -6,6 +6,5 @@ import (
 )
 
 func (s Service) GetPing(w http.ResponseWriter, r *http.Request, params api.GetPingParams) {
-	//add validation
 	sendFormattedResponse(w, r, "pong", "message")
 }
