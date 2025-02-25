@@ -13,9 +13,18 @@ const (
 	ResponseFormatText
 )
 
+func setStatus(w http.ResponseWriter, statusCode int) {
+	if statusCode < 100 || statusCode > 599 {
+		w.WriteHeader(http.StatusTeapot)
+		return
+	}
+
+	w.WriteHeader(statusCode)
+}
+
 func prepareJSON(w http.ResponseWriter, statusCode int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(statusCode)
+	setStatus(w, statusCode)
 }
 
 func sendJSON(w http.ResponseWriter, statusCode int, data interface{}) {
