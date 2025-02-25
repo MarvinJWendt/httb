@@ -8,23 +8,15 @@ import (
 )
 
 func (s Service) GetJsonRandomLog(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomLogParams) {
-	if params.Count == nil {
-		params.Count = new(int)
-		*params.Count = 1
-	}
-
-	if params.LogLevels == nil {
-		params.LogLevels = new([]string)
-		*params.LogLevels = []string{"debug", "info", "warn", "error"}
-	}
-
-	if params.LogLevelWeights == nil {
-		params.LogLevelWeights = new([]float32)
-		*params.LogLevelWeights = []float32{1, 5, 2, 1}
+	if ok := s.Validate(w, &params); !ok {
+		return
 	}
 
 	if len(*params.LogLevels) != len(*params.LogLevelWeights) {
-		sendError(w, http.StatusBadRequest, "log levels and weights must have the same length")
+		sendJSON(w, http.StatusBadRequest, api.ValidationError{
+			Message:    "log levels and weights must have the same length",
+			StatusCode: http.StatusBadRequest,
+		})
 	}
 
 	logLevels := make(map[string]float32)
@@ -36,14 +28,14 @@ func (s Service) GetJsonRandomLog(w http.ResponseWriter, r *http.Request, params
 	_, _ = w.Write([]byte(random.NewLog(*params.Count, logLevels).String()))
 }
 
-func (s Service) GetJsonRandomAddress(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomAddressParams) {
+func (s Service) GetJsonRandomAddress(w http.ResponseWriter, r *http.Request, _ api.GetJsonRandomAddressParams) {
 	sendJSON(w, http.StatusOK, random.Address())
 }
 
 func (s Service) GetJsonRandomAddresses(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomAddressesParams) {
-	if params.Count == nil {
-		params.Count = new(int)
-		*params.Count = 10
+	if ok := s.Validate(w, &params); !ok {
+
+		return
 	}
 
 	addresses := make([]api.Address, *params.Count)
@@ -54,14 +46,13 @@ func (s Service) GetJsonRandomAddresses(w http.ResponseWriter, r *http.Request, 
 	sendJSON(w, http.StatusOK, addresses)
 }
 
-func (s Service) GetJsonRandomContact(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomContactParams) {
+func (s Service) GetJsonRandomContact(w http.ResponseWriter, r *http.Request, _ api.GetJsonRandomContactParams) {
 	sendJSON(w, http.StatusOK, random.Contact())
 }
 
 func (s Service) GetJsonRandomContacts(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomContactsParams) {
-	if params.Count == nil {
-		params.Count = new(int)
-		*params.Count = 10
+	if ok := s.Validate(w, &params); !ok {
+		return
 	}
 
 	contacts := make([]api.Contact, *params.Count)
@@ -73,25 +64,14 @@ func (s Service) GetJsonRandomContacts(w http.ResponseWriter, r *http.Request, p
 }
 
 func (s Service) GetJsonRandom(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomParams) {
-	if params.MinDepth == nil {
-		params.MinDepth = new(int)
-		*params.MinDepth = 3
-	}
-
-	if params.MaxDepth == nil {
-		params.MaxDepth = new(int)
-		*params.MaxDepth = 5
-	}
-
-	if params.MaxElems == nil {
-		params.MaxElems = new(int)
-		*params.MaxElems = 3
+	if ok := s.Validate(w, &params); !ok {
+		return
 	}
 
 	sendJSON(w, http.StatusOK, RandomJSON(*params.MinDepth, *params.MaxDepth, *params.MaxElems))
 }
 
-func (s Service) GetJsonRandomUser(w http.ResponseWriter, r *http.Request, params api.GetJsonRandomUserParams) {
+func (s Service) GetJsonRandomUser(w http.ResponseWriter, r *http.Request, _ api.GetJsonRandomUserParams) {
 	sendJSON(w, http.StatusOK, random.User())
 }
 
