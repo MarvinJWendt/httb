@@ -187,7 +187,7 @@ type GetJsonRandomUsersParams struct {
 // GetPingParams defines parameters for GetPing.
 type GetPingParams struct {
 	// Format Response format (default: `json`)
-	Format *GetPingParamsFormat `default:"json" form:"format,omitempty" json:"format,omitempty" validate:"oneOf=json,text"`
+	Format *GetPingParamsFormat `default:"json" form:"format,omitempty" json:"format,omitempty" validate:"oneof=json text"`
 
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
 	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`

@@ -592,7 +592,7 @@ components:
         enum: [ json, text ]
         default: json
       x-oapi-codegen-extra-tags:
-        validate: oneOf=json,text
+        validate: oneof=json text
         default: "json"
     DelayParam:
       name: delay
