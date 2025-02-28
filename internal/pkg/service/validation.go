@@ -25,7 +25,7 @@ func (s Service) Validate(w http.ResponseWriter, data any) bool {
 		var invalidValidationError *validator.InvalidValidationError
 		if errors.As(err, &invalidValidationError) {
 			sendJSON(w, http.StatusBadRequest, api.ValidationError{
-				Message:    "Validation failed: illegal argument was passed",
+				Message:    "validation failed: illegal argument was passed",
 				StatusCode: http.StatusBadRequest,
 			})
 		}
@@ -42,7 +42,7 @@ func (s Service) Validate(w http.ResponseWriter, data any) bool {
 			})
 		}
 		sendJSON(w, http.StatusBadRequest, api.ValidationError{
-			Message:    "Validation failed",
+			Message:    "validation failed",
 			StatusCode: http.StatusBadRequest,
 			Errors:     &result,
 		})
