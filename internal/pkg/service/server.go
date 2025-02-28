@@ -13,7 +13,10 @@ import (
 func (s Service) Start() error {
 	slog.Info("starting httb service")
 
-	service := NewService(s.config)
+	service, err := NewService(s.config)
+	if err != nil {
+		return err
+	}
 	r := http.NewServeMux()
 	h := api.HandlerFromMux(service, r)
 

@@ -5,29 +5,29 @@ import (
 	"net/http"
 )
 
-func (s Service) DeleteStatusStatus(w http.ResponseWriter, r *http.Request, status int, params api.DeleteStatusStatusParams) {
-	sendStatus(w, status)
+func (s Service) DeleteStatusCode(w http.ResponseWriter, _ *http.Request, code int, _ api.DeleteStatusCodeParams) {
+	sendStatus(w, code)
 }
 
-func (s Service) GetStatusStatus(w http.ResponseWriter, r *http.Request, status int, params api.GetStatusStatusParams) {
-	sendStatus(w, status)
+func (s Service) GetStatusCode(w http.ResponseWriter, _ *http.Request, code int, _ api.GetStatusCodeParams) {
+	sendStatus(w, code)
 }
 
-func (s Service) PatchStatusStatus(w http.ResponseWriter, r *http.Request, status int, params api.PatchStatusStatusParams) {
-	sendStatus(w, status)
+func (s Service) PatchStatusCode(w http.ResponseWriter, _ *http.Request, code int, _ api.PatchStatusCodeParams) {
+	sendStatus(w, code)
 }
 
-func (s Service) PostStatusStatus(w http.ResponseWriter, r *http.Request, status int, params api.PostStatusStatusParams) {
-	sendStatus(w, status)
+func (s Service) PostStatusCode(w http.ResponseWriter, _ *http.Request, code int, _ api.PostStatusCodeParams) {
+	sendStatus(w, code)
 }
 
-func (s Service) PutStatusStatus(w http.ResponseWriter, r *http.Request, status int, params api.PutStatusStatusParams) {
-	sendStatus(w, status)
+func (s Service) PutStatusCode(w http.ResponseWriter, _ *http.Request, code int, _ api.PutStatusCodeParams) {
+	sendStatus(w, code)
 }
 
-func sendStatus(w http.ResponseWriter, status int) {
-	sendJSON(w, status, map[string]any{
-		"status":  status,
-		"message": http.StatusText(status),
+func sendStatus(w http.ResponseWriter, code int) {
+	sendJSON(w, code, map[string]any{
+		"status":  code,
+		"message": http.StatusText(code),
 	})
 }

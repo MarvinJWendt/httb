@@ -13,12 +13,21 @@ const (
 	ResponseFormatText
 )
 
-func prepareJSON(w http.ResponseWriter, statusCode int) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func setStatus(w http.ResponseWriter, statusCode int) {
+	if statusCode < 100 || statusCode > 599 {
+		w.WriteHeader(http.StatusTeapot)
+		return
+	}
+
 	w.WriteHeader(statusCode)
 }
 
-func sendJSON(w http.ResponseWriter, statusCode int, data interface{}) {
+func prepareJSON(w http.ResponseWriter, statusCode int) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	setStatus(w, statusCode)
+}
+
+func sendJSON(w http.ResponseWriter, statusCode int, data any) {
 	prepareJSON(w, statusCode)
 	_ = json.NewEncoder(w).Encode(data)
 }
@@ -59,4 +68,8 @@ func sendFormattedResponse(w http.ResponseWriter, r *http.Request, text, keyName
 	default:
 		sendError(w, http.StatusBadRequest, "invalid format")
 	}
+}
+
+func Ptr[A any](value A) *A {
+	return &value
 }

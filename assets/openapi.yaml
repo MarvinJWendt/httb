@@ -69,6 +69,9 @@ paths:
             minimum: 1
             maximum: 5
             default: 3
+          x-oapi-codegen-extra-tags:
+            validate: gt=1,lte=5
+            default: "3"
         - name: minDepth
           in: query
           description: "Minimum depth of the JSON object"
@@ -77,6 +80,9 @@ paths:
             minimum: 1
             maximum: 3
             default: 1
+          x-oapi-codegen-extra-tags:
+            validate: gt=0,lte=3
+            default: "1"
         - name: maxElems
           in: query
           description: "Maximum number of elements per JSON object"
@@ -85,6 +91,9 @@ paths:
             minimum: 1
             maximum: 10
             default: 3
+          x-oapi-codegen-extra-tags:
+            validate: gt=0,lte=10
+            default: "3"
       responses:
         '200':
           description: JSON data.
@@ -111,6 +120,9 @@ paths:
             minimum: 1
             maximum: 10000
             default: 10
+          x-oapi-codegen-extra-tags:
+            validate: gt=1,lte=10000
+            default: "10"
       responses:
         '200':
           description: Log data.
@@ -223,6 +235,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request - validation failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
 
   # --- Streaming Endpoints ---
   /stream/json/user:
@@ -272,7 +290,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -286,7 +308,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -300,7 +326,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -314,7 +344,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -328,7 +362,11 @@ paths:
       summary: "Returns the request data as JSON"
       parameters:
         - $ref: '#/components/parameters/DelayParam'
-        - $ref: '#/components/parameters/FormatParam'
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
       responses:
         '200':
           description: "Request data"
@@ -338,9 +376,9 @@ paths:
                 type: object
 
   # --- Status ---
-  /status/{status}:
+  /status/{code}:
     parameters:
-      - name: status
+      - name: code
         in: path
         description: "HTTP status code that should be returned."
         required: true
@@ -490,11 +528,35 @@ components:
           x-oapi-codegen-extra-tags:
             fake: "{randomstring:[male,female,other]}"
         contact:
-          type: object
           $ref: '#/components/schemas/Contact'
         address:
-          type: object
           $ref: '#/components/schemas/Address'
+    ValidationError:
+      type: object
+      properties:
+        status_code:
+          type: integer
+        message:
+          type: string
+        errors:
+          $ref: '#/components/schemas/ValidationMessages'
+      required:
+        - status_code
+        - message
+    ValidationMessages:
+      type: array
+      items:
+        $ref: '#/components/schemas/ValidationMessage'
+    ValidationMessage:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+      required:
+        - field
+        - message
     Log:
       type: object
       properties:
@@ -522,6 +584,9 @@ components:
         type: string
         enum: [ json, text ]
         default: json
+      x-oapi-codegen-extra-tags:
+        validate: oneof=json text
+        default: "json"
     DelayParam:
       name: delay
       in: query
@@ -532,6 +597,18 @@ components:
         minimum: 0
         maximum: 10000
         default: 0
+    StatusParam:
+      name: status
+      in: query
+      description: "HTTP status code that should be returned."
+      schema:
+        type: integer
+        minimum: 100
+        maximum: 599
+        default: 200
+      x-oapi-codegen-extra-tags:
+        validate: gt=100,lte=599
+        default: "200"
     LogLevels:
       name: logLevels
       in: query
@@ -541,24 +618,31 @@ components:
         items:
           type: string
         default: [ debug, info, warn, error ]
+      x-oapi-codegen-extra-tags:
+        default: '[\" debug\",\" info\",\" warn\",\" error\" ]'
     LogLevelWeights:
-        name: logLevelWeights
-        in: query
-        description: "Log level weights (default: `1,5,3,2`)"
-        schema:
-          type: array
-          items:
-            type: number
-          default: [ 1, 5, 3, 2 ]
+      name: logLevelWeights
+      in: query
+      description: "Log level weights (default: `1,5,3,2`)"
+      schema:
+        type: array
+        items:
+          type: number
+        default: [ 1, 5, 3, 2 ]
+      x-oapi-codegen-extra-tags:
+        default: "[1, 5, 3, 2]"
     StreamInterval:
-        name: interval
-        in: query
-        description: "Interval in milliseconds between streamed responses (min: 0; max: 5000)"
-        schema:
-            type: integer
-            minimum: 0
-            maximum: 5000
-            default: 250
+      name: interval
+      in: query
+      description: "Interval in milliseconds between streamed responses (min: 0; max: 5000)"
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 5000
+        default: 250
+      x-oapi-codegen-extra-tags:
+        validate: gt=0,lte=5000
+        default: "250"
     Count:
       name: count
       in: query
@@ -568,7 +652,9 @@ components:
         minimum: 1
         maximum: 10000
         default: 10
-
+      x-oapi-codegen-extra-tags:
+        validate: gt=1,lte=10000
+        default: "10"
 tags:
   - name: Meta
     description: "Endpoints providing meta functionality."
