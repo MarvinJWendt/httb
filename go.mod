@@ -13,7 +13,7 @@ require (
 	github.com/golangci/golangci-lint v1.62.2
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
-	github.com/samber/slog-http v1.5.1
+	github.com/samber/slog-http v1.6.0
 )
 
 require (
