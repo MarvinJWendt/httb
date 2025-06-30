@@ -52,6 +52,31 @@ paths:
               schema:
                 type: string
 
+  /ip:
+    get:
+      tags:
+        - Meta
+      summary: Returns the client's IP address
+      description: Returns the real IP address of the client, respecting reverse proxy headers like X-Forwarded-For, X-Real-IP, etc.
+      parameters:
+        - $ref: '#/components/parameters/DelayParam'
+      responses:
+        '200':
+          description: "Returns the client's IP address."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ip:
+                    type: string
+                    description: "Client's IP address"
+                    example: "192.168.1.1"
+            text/plain:
+              example: "192.168.1.1"
+              schema:
+                type: string
+
   # --- JSON Endpoints ---
   /json/random:
     get:

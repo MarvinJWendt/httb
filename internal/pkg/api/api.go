@@ -109,6 +109,12 @@ type LogLevels = []string
 // StreamInterval defines model for StreamInterval.
 type StreamInterval = int
 
+// GetIpParams defines parameters for GetIp.
+type GetIpParams struct {
+	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
+	Delay *DelayParam `form:"delay,omitempty" json:"delay,omitempty"`
+}
+
 // GetJsonRandomParams defines parameters for GetJsonRandom.
 type GetJsonRandomParams struct {
 	// Delay Delay in milliseconds before the response is sent (min: 0; max: 10000)
@@ -282,6 +288,9 @@ type GetStreamJsonUserParams struct {
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Returns the client's IP address
+	// (GET /ip)
+	GetIp(w http.ResponseWriter, r *http.Request, params GetIpParams)
 	// Returns random JSON data.
 	// (GET /json/random)
 	GetJsonRandom(w http.ResponseWriter, r *http.Request, params GetJsonRandomParams)
@@ -355,6 +364,33 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// GetIp operation middleware
+func (siw *ServerInterfaceWrapper) GetIp(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetIpParams
+
+	// ------------- Optional query parameter "delay" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "delay", r.URL.Query(), &params.Delay)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "delay", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetIp(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // GetJsonRandom operation middleware
 func (siw *ServerInterfaceWrapper) GetJsonRandom(w http.ResponseWriter, r *http.Request) {
@@ -1200,6 +1236,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
+	m.HandleFunc("GET "+options.BaseURL+"/ip", wrapper.GetIp)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random", wrapper.GetJsonRandom)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/address", wrapper.GetJsonRandomAddress)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/addresses", wrapper.GetJsonRandomAddresses)
