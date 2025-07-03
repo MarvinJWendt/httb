@@ -1,13 +1,18 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"fmt"
-	"github.com/marvinjwendt/httb/internal/pkg/service"
 	"log/slog"
 	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/marvinjwendt/httb/internal/pkg/service"
 
 	"github.com/marvinjwendt/httb/internal/pkg/config"
+	_ "go.uber.org/automaxprocs"
 )
 
 var cfg *config.Config
@@ -37,9 +42,37 @@ func main() {
 	svc, err := service.NewService(cfg)
 	if err != nil {
 		slog.Error("failed to init service", "error", err)
+		os.Exit(1)
 	}
 
-	if err := svc.Start(); err != nil {
-		slog.Error("failed to start service", "error", err)
+	// Create context for graceful shutdown
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Handle shutdown signals
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+	// Start service in a goroutine
+	go func() {
+		if err := svc.Start(ctx); err != nil {
+			slog.Error("failed to start service", "error", err)
+			cancel()
+		}
+	}()
+
+	// Wait for shutdown signal
+	<-sigChan
+	slog.Info("received shutdown signal, starting graceful shutdown")
+
+	// Give the server time to shutdown gracefully based on config
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), cfg.ShutdownTimeout)
+	defer shutdownCancel()
+
+	if err := svc.Shutdown(shutdownCtx); err != nil {
+		slog.Error("failed to shutdown service gracefully", "error", err)
+		os.Exit(1)
 	}
+
+	slog.Info("service shutdown completed")
 }

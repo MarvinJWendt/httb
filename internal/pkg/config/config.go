@@ -2,11 +2,12 @@ package config
 
 import (
 	"fmt"
-	"github.com/caarlos0/env/v11"
 	"log/slog"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/caarlos0/env/v11"
 )
 
 // Config holds application configuration.
@@ -15,6 +16,7 @@ type Config struct {
 	LogFormat                string        `env:"LOG_FORMAT" envDefault:"logfmt"`
 	Addr                     string        `env:"ADDR" envDefault:"0.0.0.0:8080"`
 	Timeout                  time.Duration `env:"TIMEOUT" envDefault:"2m"`
+	ShutdownTimeout          time.Duration `env:"SHUTDOWN_TIMEOUT" envDefault:"30s"`
 	SwaggerDefaultServer     string        `env:"SWAGGER_DEFAULT_SERVER" envDefault:"http://localhost:8080"`
 	SwaggerDefaultServerDesc string        `env:"SWAGGER_DEFAULT_SERVER_DESCRIPTION" envDefault:"for local testing"`
 }

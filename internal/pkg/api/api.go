@@ -288,6 +288,9 @@ type GetStreamJsonUserParams struct {
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Health check endpoint
+	// (GET /health)
+	GetHealth(w http.ResponseWriter, r *http.Request)
 	// Returns the client's IP address
 	// (GET /ip)
 	GetIp(w http.ResponseWriter, r *http.Request, params GetIpParams)
@@ -318,6 +321,9 @@ type ServerInterface interface {
 	// Returns "pong"
 	// (GET /ping)
 	GetPing(w http.ResponseWriter, r *http.Request, params GetPingParams)
+	// Readiness check endpoint
+	// (GET /ready)
+	GetReady(w http.ResponseWriter, r *http.Request)
 	// Returns the request data as JSON
 	// (DELETE /return)
 	DeleteReturn(w http.ResponseWriter, r *http.Request, params DeleteReturnParams)
@@ -364,6 +370,20 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// GetHealth operation middleware
+func (siw *ServerInterfaceWrapper) GetHealth(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetHealth(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // GetIp operation middleware
 func (siw *ServerInterfaceWrapper) GetIp(w http.ResponseWriter, r *http.Request) {
@@ -706,6 +726,20 @@ func (siw *ServerInterfaceWrapper) GetPing(w http.ResponseWriter, r *http.Reques
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetPing(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetReady operation middleware
+func (siw *ServerInterfaceWrapper) GetReady(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetReady(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1236,6 +1270,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
+	m.HandleFunc("GET "+options.BaseURL+"/health", wrapper.GetHealth)
 	m.HandleFunc("GET "+options.BaseURL+"/ip", wrapper.GetIp)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random", wrapper.GetJsonRandom)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/address", wrapper.GetJsonRandomAddress)
@@ -1246,6 +1281,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/user", wrapper.GetJsonRandomUser)
 	m.HandleFunc("GET "+options.BaseURL+"/json/random/users", wrapper.GetJsonRandomUsers)
 	m.HandleFunc("GET "+options.BaseURL+"/ping", wrapper.GetPing)
+	m.HandleFunc("GET "+options.BaseURL+"/ready", wrapper.GetReady)
 	m.HandleFunc("DELETE "+options.BaseURL+"/return", wrapper.DeleteReturn)
 	m.HandleFunc("GET "+options.BaseURL+"/return", wrapper.GetReturn)
 	m.HandleFunc("PATCH "+options.BaseURL+"/return", wrapper.PatchReturn)

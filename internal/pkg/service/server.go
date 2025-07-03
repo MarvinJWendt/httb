@@ -1,16 +1,18 @@
 package service
 
 import (
-	"github.com/marvinjwendt/httb/assets"
-	"github.com/marvinjwendt/httb/internal/pkg/api"
-	sloghttp "github.com/samber/slog-http"
+	"context"
 	"io/fs"
 	"log/slog"
 	"net/http"
 	"text/template"
+
+	"github.com/marvinjwendt/httb/assets"
+	"github.com/marvinjwendt/httb/internal/pkg/api"
+	sloghttp "github.com/samber/slog-http"
 )
 
-func (s Service) Start() error {
+func (s *Service) Start(ctx context.Context) error {
 	slog.Info("starting httb service")
 
 	service, err := NewService(s.config)
@@ -55,15 +57,21 @@ func (s Service) Start() error {
 	h = sloghttp.Recovery(h)
 	h = sloghttp.New(slog.Default())(h)
 
-	server := &http.Server{
+	s.server = &http.Server{
 		Handler: h,
-		Addr:    "0.0.0.0:8080",
+		Addr:    s.config.Addr,
 	}
 
-	if err := server.ListenAndServe(); err != nil {
-		slog.Error("server stopped", "error", err)
-		return err
-	}
+	// Start server in a goroutine
+	go func() {
+		if err := s.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			slog.Error("server stopped", "error", err)
+		}
+	}()
+
+	// Wait for context cancellation
+	<-ctx.Done()
+	slog.Info("shutdown signal received, stopping server")
 
 	return nil
 }
